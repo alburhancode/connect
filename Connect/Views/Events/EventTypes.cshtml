@@ -1,0 +1,48 @@
+﻿@model List<Connect.Classes.DataModels.EventType>
+
+<div id="divAssessmentTypes">
+    <p style="float:right;">
+        <button style="float:right;" id='create-assessment-type' url='@Url.Action("CreateAssessmentType")'>Create Assessment Type</button>
+        <div id='createAssessmentTypeModal' class='modal' style="padding:50px;">
+            <div class="modal-assessments-create">
+                <button id="close-create-assessment-type-modal" style="float:right; font-size: 18px; background-color:red;color:yellow; font-weight:bold;">x</button>
+                <div id="divCreateAssessmentTypeContainer" style="padding: 20px;">
+                </div>
+            </div>
+        </div>
+    </p>
+
+    <table id="details_event">
+        <tr>
+            <th>
+                Type
+            </th>
+            <th>
+                Subject
+            </th>
+            @*<th>
+                Additional Text
+            </th>*@
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Subject)
+                </td>
+                @*<td>
+                    @Html.DisplayFor(modelItem => item.AdditionalText)
+                </td>*@
+                <td>
+                    <button style="float:right;" id='delete-event-type' url='@Url.Action("DeleteEventType", new { id = item.EventTypeId })'>Delete</button>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

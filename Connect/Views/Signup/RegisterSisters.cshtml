@@ -1,0 +1,213 @@
+﻿@using Connect.Classes.DataModels
+@using Connect.Classes.Helpers
+@using Connect.Classes
+
+@model Connect.Models.SignupViewModel
+@{
+    ViewBag.Title = "Al Burhan Institute Signup";
+}
+
+<div>
+    <div>
+        <h5>Your e-mail address (login user name) is <span style="color:#32597c;">@Model.Email</span></h5>
+    </div>
+    <div class="container" style="font-family:Helvetica, Arial, sans-serif; line-height:1.5; -webkit-font-smoothing: antialiased; color:#004242;">
+        <div class="row">
+            <div>
+                @using (Html.BeginForm("Register", "Signup", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.Id)
+
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger col-md-2" })
+                    <div>
+                        <div style="float:right;">
+                            @Html.ActionLink("Back to Details", "PreviewForAdmin", "Main", new { id = Model.Id }, null)
+                        </div>
+                        <br/>
+                        <table id="details_plain_small">
+                            <tr><td colspan="3"><hr /></td></tr>
+                            <tr>
+                                <td colspan="3">
+                                    <p class="section-heading2"><img width="35" height="30" src="~/Images/contact-details.png"><span style="padding-left: 15px;">Contact Details</span></p>
+                                </td>
+                            </tr>
+
+                            @if (SessionHelper.LoggedInUser.UserType != UserType.Applicant && Model.RegistrationStatus != RegistrationStatus.Enrolled)
+                            {
+                                <tr class="form-group">
+                                    <td>@Html.LabelFor(model => model.Name, "Name")</td>
+                                    <td>
+                                        <div>
+                                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "textbox-my", MaxLength = "50", MinLength = "1", placeholder = "Name" } })
+                                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="form-group">
+                                    <td>@Html.LabelFor(model => model.NicNumber, "CNIC Number")</td>
+                                    <td>
+                                        <div>
+                                            @Html.EditorFor(model => model.NicNumber, new { htmlAttributes = new { @class = "textbox-my JS_MaxNicNumber", MaxLength = "13", placeholder = "13 digit Cnic Number" } })
+                                            @Html.ValidationMessageFor(model => model.NicNumber, "", new { @class = "text-danger" })
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+
+                            <tr class="form-group">
+                                <td>@Html.LabelFor(model => model.FatherOrHusbandName, "Father/Husband Name")</td>
+                                <td>
+                                    <div>
+                                        @Html.EditorFor(model => model.FatherOrHusbandName, new { htmlAttributes = new { @class = "textbox-my", MaxLength = "50", MinLength = "1", placeholder = "Father/Husband Name" } })
+                                        @Html.ValidationMessageFor(model => model.FatherOrHusbandName, "", new { @class = "text-danger" })
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr class="form-group">
+                                <td>@Html.LabelFor(model => model.Phone, "Contact Number")</td>
+                                <td>
+                                    <div>
+                                        @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "textbox-my JS_MaxOtherContact", placeholder = "Phone: 03xxxxxxxxx", MaxLength = "14", MinLength = "5" } })
+                                        @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr class="form-group">
+                                <td>@Html.LabelFor(model => model.WhatsAppNumber, "WhatsApp Number")</td>
+                                <td>
+                                    <div>
+                                        @Html.EditorFor(model => model.WhatsAppNumber, new { htmlAttributes = new { @class = "textbox-my JS_MaxOtherContact", placeholder = "Phone: 03xxxxxxxxx", MaxLength = "14", MinLength = "5" } })
+                                        @Html.ValidationMessageFor(model => model.WhatsAppNumber, "", new { @class = "text-danger" })
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr class="form-group">
+                                <td>@Html.LabelFor(model => model.OtherContact, "Other Contact Number")</td>
+                                <td>
+                                    <div>
+                                        @Html.EditorFor(model => model.OtherContact, new { htmlAttributes = new { @class = "textbox-my JS_MaxOtherContact", placeholder = "Phone: 03xxxxxxxxx", MaxLength = "14", MinLength = "5" } })
+                                        @Html.ValidationMessageFor(model => model.OtherContact, "", new { @class = "text-danger" })
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="form-group">
+                                <td>@Html.LabelFor(model => model.ResidentialAddress, "Residential Address")</td>
+                                <td>
+                                    <div>
+                                        @Html.EditorFor(model => model.ResidentialAddress, new { htmlAttributes = new { @class = "textbox-my", placeholder = "Residential Address", MaxLength = "128" } })
+                                        @Html.ValidationMessageFor(model => model.ResidentialAddress, "", new { @class = "text-danger" })
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="form-group">
+                                <td>@Html.LabelFor(model => model.MaritalStatus, "Marital Status")</td>
+                                <td>
+                                    <div>
+                                        @Html.EnumDropDownListFor(model => model.MaritalStatus, new { @class = "form-dropdown-my", placeholder = "Marital Status" })
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
+                    <br />
+                    <div>
+                        <p class="JS_Education_Message" style="display: none;">@Html.Label("please provide values for each of the education fields below", new { @class = "text-danger" })</p>
+                        <table id="details_plain_small">
+                            <tr><td colspan="2"><hr /></td></tr>
+                            <tr>
+                                <td colspan="2">
+                                    <p class="section-heading2"><img width="35" height="30" src="~/Images/education.png"><span style="padding-left: 15px;">Educational Background</span></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>@Html.Label("Education")</td>
+                                <td>
+                                    @Html.EditorFor(model => model.EducationDetails, new { htmlAttributes = new { @class = "textbox-my ", placeholder = "Education" } })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.LabelFor(model => model.AnyReligiousEducation, "Any religious education?")
+                                </td>
+
+                                <td>
+                                    <p>
+                                        @Html.CheckBoxFor(model => model.AnyReligiousEducation, new { @class = "largerCheckbox" })
+                                    </p>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.Label("Specify if Yes")
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model.ReligiousEducationSpecify, new { htmlAttributes = new { @class = "textbox-my", MaxLength = "128", placeholder = "Religious Education" } })
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
+                    <div>
+                        <table id="details_plain_small">
+                            <tr><td colspan="3"><hr /></td></tr>
+                            <tr>
+                                <td colspan="3">
+                                    <p class="section-heading2">Profession / Studies / Business Details</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>@Html.Label("Profession, Study, Business Details?")</td>
+                                <td>
+                                    @Html.EditorFor(model => model.ProfessionStudyBusinessDetails, new { htmlAttributes = new { @class = "textbox-my", MaxLength = "128", placeholder = "Profession/Study/BusinessDetails" } })
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    @if (SessionHelper.LoggedInUser.UserType == UserType.PaymentAdministrator || SessionHelper.LoggedInUser.UserType == UserType.Ceo)
+                    {
+                        <div class="JS_InterviewSelectionShowHide">
+                            <table id="details_plain_small">
+                                <tr><td colspan="3"><hr /></td></tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <p class="section-heading2">Interview Details</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p>Change your interview date and time from the available slots</p>
+                                    </td>
+                                    <td>
+                                        <p>@Html.ValidationMessage("InterviewSlotOccupied", new { @class = "text-danger" })</p>
+                                        @Html.DropDownListFor(x => x.SelectedInterviewSlotId, new SelectList(Model.AvailableInterviewSlots, "InterviewSlotId", "Slot"), new { @class = "form-dropdown-my" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br />
+                    }
+                    <br />
+                    <div class="form-group">
+                        <input type="submit" value="Save Details" class="btn btn-default submit_register button-my-apply" />
+                    </div>
+
+                </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

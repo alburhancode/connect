@@ -1,0 +1,58 @@
+﻿@using Connect.Classes.Helpers
+@model Connect.Models.Quiz.OverallAttendanceViewModel
+@{
+    ViewBag.Title = "AttendanceMain";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="background-color:rgba(195,195,195,.3); padding: 1px; border:beige 1px solid; border-radius:3px;">
+    <div style="padding:2px;">
+        <img style="float:left; padding: 5px;" src="~/Images/burhan2.png" width="85" height="85" />
+        Batch <h4>@SessionHelper.LoggedInUser.Batch</h4>
+        <h4 style="float:right;padding-right:2px; color:#413d62;">Attendance (حاضری)</h4>
+    </div>
+    <div style="clear:both;" />
+    <hr style="height:2px; background-color:gray;" />
+    <div style="font-size:smaller; overflow: auto;" align="center">
+        <b>Attendance by section</b>
+        <table style="width: 70%; text-align:center;" cellpadding="3" border="1">
+            <tr style="background-color:lightblue;">
+                @foreach (var item in Model.OverallAttendance)
+                {
+                    <td>
+                        @item.Section
+                    </td>
+                }
+            </tr>
+            <tr>
+                @foreach (var item in Model.OverallAttendance)
+                {
+                    <td>
+                        <p><b>@item.LeavePercentile.ToString().Insert(2, ".") % </b></p>
+                        <div style="line-height:2px !important;">
+                            <p style="font-size:smaller">present: <b>@item.Present</b></p>
+                            <p style="font-size:smaller">leave: <b>@item.Leave</b></p>
+                            <p style="font-size:smaller">total: <b>@item.Total</b></p>
+                        </div>
+                    </td>
+                }
+            </tr>
+        </table>
+    </div>
+
+    <hr style="height:2px; background-color:white;" />
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                @{ Html.RenderAction("AttendanceBySectionGet", "AttendanceMain", new { section = SessionHelper.LoggedInUser.Section }); }
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

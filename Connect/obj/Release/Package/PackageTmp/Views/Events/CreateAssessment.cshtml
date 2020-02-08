@@ -1,0 +1,40 @@
+﻿@model Recruitwise.Models.Quiz.CreateAssessmentViewModel
+   
+    <div id="divCreateAssessment">
+        <div class="form-horizontal" align="center">
+            <h2>Create an assessment type</h2>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <div>
+                    @Html.DropDownListFor(model => model.EventTypes[0], new SelectList(Model.EventTypes, "EventTypeId", "TypeSubjectCombined"), new { @class = "form-dropdown-my-assessments", @id = "dropdown-assessment" })
+                    @Html.ValidationMessageFor(model => model.EventTypeId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    @Html.EditorFor(model => model.MaxMarks, new { htmlAttributes = new { @class = "textbox-my-bigger-assessments", placeholder = "maximum marks", @Value = "100" } })
+                    @Html.ValidationMessageFor(model => model.MaxMarks, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    @Html.EditorFor(model => model.DateConducted, new { htmlAttributes = new { @class = "textbox-my-bigger-assessments", @id = "datepicker1", placeholder = "click to choose a date" } })
+                    @Html.ValidationMessageFor(model => model.DateConducted, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    @Html.EditorFor(model => model.ConductedBy, new { htmlAttributes = new { @class = "textbox-my-bigger-assessments", placeholder = "Conducted By (eg. Mufti Sahab)" } })
+                    @Html.ValidationMessageFor(model => model.ConductedBy, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div>
+                <button id="create-assessment-post" class="button-my-assessments">Create</button>
+            </div>
+        </div>
+</div>

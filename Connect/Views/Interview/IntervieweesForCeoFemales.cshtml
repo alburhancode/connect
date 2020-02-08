@@ -1,0 +1,174 @@
+﻿@using Connect.Classes
+@model Connect.Models.Interview.InterviewViewModel
+
+@{
+    ViewBag.Title = "CEO View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h3>You are logged in as CEO for Al Burhan</h3>
+
+<div style="font-size:smaller; overflow: auto;" align="center">
+    <table style="width: 70%; text-align:center;" cellpadding="3" border="1">
+        <tr style="background-color:lightblue;">
+            <td><b>A+</b></td>
+            <td><b>A</b></td>
+            <td><b>A-</b></td>
+            <td>B+</td>
+            <td>B</td>
+            <td>C</td>
+            <td>L/R</td>
+            <td>N/G</td>
+        </tr>
+        <tr>
+            <td><b>@Model.Interviewees.Count(i => i.CeoGradeValue == "A+")</b></td>
+            <td><b>@Model.Interviewees.Count(i => i.CeoGradeValue == "A")</b></td>
+            <td><b>@Model.Interviewees.Count(i => i.CeoGradeValue == "A-")</b></td>
+            <td>@Model.Interviewees.Count(i => i.CeoGradeValue == "B+")</td>
+            <td>@Model.Interviewees.Count(i => i.CeoGradeValue == "B")</td>
+            <td>@Model.Interviewees.Count(i => i.CeoGradeValue == "C")</td>
+            <td>@Model.Interviewees.Count(i => i.CeoGradeValue == "Listener")</td>
+            <td>@Model.Interviewees.Count(i => i.CeoGradeValue == "Not Graded")</td>
+        </tr>
+    </table>
+</div>
+
+<hr />
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tab">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#Section1" aria-controls="home" role="tab" data-toggle="tab">Waiting for CEO's Interview (@Model.Interviewees.Count(i => i.PanelGrade > 0 && i.CeoGrade < 1))</a></li>
+                    <li role="presentation"><a href="#Section2" aria-controls="profile" role="tab" data-toggle="tab">Fully Interviewed (@Model.Interviewees.Count(i => i.PanelGrade > 0 && i.CeoGrade > 0))</a></li>
+                    <li role="presentation"><a href="#Section3" aria-controls="profile" role="tab" data-toggle="tab">Not Interviewed At All (@Model.Interviewees.Count(i => i.PanelGrade < 1 && i.CeoGrade < 1))</a></li>
+                    <li role="presentation"><a href="#Section4" aria-controls="profile" role="tab" data-toggle="tab">CEO Interviewed, Panel didnt (@Model.Interviewees.Count(i => i.PanelGrade < 1 && i.CeoGrade > 0))</a></li>
+                </ul>
+            </div>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane fade in active" id="Section1">
+                    <div style="overflow: auto;">
+                        <table id="details">
+                            <tr>
+                                <th>
+                                    <b>Name</b>
+                                </th>
+                                <th>Age</th>
+                                <th>
+                                    <b>Interview Time</b>
+                                </th>
+                                <th>Panel Grade</th>
+                            </tr>
+
+                            @foreach (var item in Model.Interviewees.Where(i => i.PanelGrade > 0 && i.CeoGrade < 1))
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.ActionLink(item.Name + item.LastName, "PreviewForAdmin", "Main", new { id = item.Id }, null)
+                                    </td>
+                                    <td>@item.Age</td>
+                                    <td>@item.InterviewDateAndTime</td>
+                                    <td>@item.PanelGradeValue</td>
+                                </tr>
+                            }
+
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="Section2">
+                    <div style="overflow: auto;">
+                        <table id="details">
+                            <tr>
+                                <th>
+                                    <b>Name</b>
+                                </th>
+                                <th>Age</th>
+                                <th>
+                                    <b>Phone</b>
+                                </th>
+                                <th>Panel Grade</th>
+                                <th>CEO Grade</th>
+                            </tr>
+
+                            @foreach (var item in Model.Interviewees.Where(i => i.PanelGrade > 0 && i.CeoGrade > 0))
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.ActionLink(item.Name + item.LastName, "PreviewForAdmin", "Main", new { id = item.Id }, null)
+                                    </td>
+                                    <td>@item.Age</td>
+                                    <td>@item.Phone</td>
+                                    <td>@item.PanelGradeValue</td>
+                                    <td>@item.CeoGradeValue</td>
+                                </tr>
+                            }
+
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="Section3">
+                    <div style="overflow: auto;">
+                        <table id="details">
+                            <tr>
+                                <th>
+                                    <b>Name</b>
+                                </th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>
+                                    <b>Interview Time</b>
+                                </th>
+                            </tr>
+
+                            @foreach (var item in Model.Interviewees.Where(i => i.PanelGrade < 1 && i.CeoGrade < 1))
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.ActionLink(item.Name + item.LastName, "PreviewForAdmin", "Main", new { id = item.Id }, null)
+
+                                    </td>
+                                    <td>@item.Phone</td>
+                                    <td>@item.Email</td>
+                                    <td>@item.InterviewDateAndTime</td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="Section4">
+                    <div style="overflow: auto;">
+                        <table id="details">
+                            <tr>
+                                <th>
+                                    <b>Name</b>
+                                </th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>
+                                    <b>Interview Time</b>
+                                </th>
+                            </tr>
+
+                            @foreach (var item in Model.Interviewees.Where(i => i.PanelGrade < 1 && i.CeoGrade > 0))
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.ActionLink(item.Name + item.LastName, "PreviewForAdmin", "Main", new { id = item.Id }, null)
+
+                                    </td>
+                                    <td>@item.Phone</td>
+                                    <td>@item.Email</td>
+                                    <td>@item.InterviewDateAndTime</td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,483 @@
+﻿@using Connect.Classes.DataModels
+@using Connect.Classes.Helpers
+@using Connect.Classes
+
+@model Connect.Models.SignupViewModel
+@{
+    ViewBag.Title = "Al Burhan Institute Signup";
+}
+
+<div>
+    <div>
+        <h5>Your e-mail address (login user name) is <span style="color:#32597c;">@Model.Email</span></h5>
+    </div>
+    <div class="container" style="font-family:Helvetica, Arial, sans-serif; line-height:1.5; -webkit-font-smoothing: antialiased; color:#004242;">
+        <div class="row">
+            <div>
+
+                @using (Html.BeginForm("Register", "Signup", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.Id)
+
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger col-md-2" })
+
+                    <div>
+                        <table id="details_plain_small">
+                            <tr><td colspan="3"><hr /></td></tr>
+                            <tr>
+                                <td colspan="3">
+                                    <p class="section-heading2"><span style="padding-left: 15px;">Future Course Selection</span></p>
+                                </td>
+                            </tr>
+                            <tr class="form-group">
+                                <td>@Html.Label("Please select your future course", new { @class = "label-simple-small" })</td>
+                                <td>
+                                    <div>
+                                        @Html.EnumDropDownListFor(model => model.AdvancedSelection, new { @class = "form-dropdown-my" })
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div>
+                        <table id="details_plain_small">
+                            <tr><td colspan="3"><hr /></td></tr>
+                            <tr>
+                                <td colspan="3">
+                                    <p class="section-heading2"><span style="padding-left: 15px;">Class Timings</span></p>
+                                </td>
+                            </tr>
+                            <tr class="form-group">
+                                <td>@Html.Label("Please select your class timing for the course", new { @class = "label-simple-small" })</td>
+                                <td>
+                                    <div>
+                                        @Html.DropDownListFor(x => x.SelectedBatchTimingId, new SelectList(Model.AvailableTimings, "BatchTimingId", "Timing"), new { @class = "form-dropdown-my" })
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div>
+                        <table id="details_plain_small">
+                            <tr><td colspan="3"><hr /></td></tr>
+                            <tr>
+                                <td colspan="3">
+                                    <p class="section-heading2"><img width="35" height="30" src="~/Images/contact-details.png"><span style="padding-left: 15px;">Contact Details</span></p>
+                                </td>
+                            </tr>
+                            <tr class="form-group">
+                                <td>@Html.LabelFor(model => model.NicNumber, "CNIC Number")</td>
+                                <td>
+                                    <div>
+                                        @Html.EditorFor(model => model.NicNumber, new { htmlAttributes = new { @class = "textbox-my JS_MaxNicNumber", MaxLength = "13", placeholder = "13 digit Cnic Number" } })
+                                        @Html.ValidationMessageFor(model => model.NicNumber, "", new { @class = "text-danger" })
+                                    </div>
+                                </td>
+                            </tr>
+
+                            @if (SessionHelper.LoggedInUser.UserType == UserType.Applicant && Model.RegistrationStatus != RegistrationStatus.Enrolled)
+                            {
+                                <tr class="form-group">
+                                    <td>@Html.LabelFor(model => model.Name, "Name")</td>
+                                    <td>
+                                        <div>
+                                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "textbox-my", MaxLength = "50", MinLength = "1", placeholder = "Name" } })
+                                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+
+                            <tr class="form-group">
+                                <td>@Html.LabelFor(model => model.Phone, "Phone")</td>
+
+                                <td>
+                                    <div>
+                                        @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "textbox-my JS_MaxOtherContact", placeholder = "Phone: 03xxxxxxxxx", MaxLength = "14", MinLength = "5" } })
+                                        @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr class="form-group">
+                                <td>@Html.LabelFor(model => model.WhatsAppNumber, "WhatsApp Number")</td>
+                                <td>
+                                    <div>
+                                        @Html.EditorFor(model => model.WhatsAppNumber, new { htmlAttributes = new { @class = "textbox-my JS_MaxOtherContact", placeholder = "Phone: 03xxxxxxxxx", MaxLength = "14", MinLength = "5" } })
+                                        @Html.ValidationMessageFor(model => model.WhatsAppNumber, "", new { @class = "text-danger" })
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr class="form-group">
+                                <td>@Html.LabelFor(model => model.OtherContact, "Other Contact")</td>
+                                <td>
+                                    <div>
+                                        @Html.EditorFor(model => model.OtherContact, new { htmlAttributes = new { @class = "textbox-my JS_MaxOtherContact", placeholder = "Phone: 03xxxxxxxxx", MaxLength = "14", MinLength = "5" } })
+                                        @Html.ValidationMessageFor(model => model.OtherContact, "", new { @class = "text-danger" })
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="form-group">
+                                <td>@Html.LabelFor(model => model.MaritalStatus, "Marital Status")</td>
+                                <td>
+                                    <div>
+                                        @Html.EnumDropDownListFor(model => model.MaritalStatus, new { @class = "form-dropdown-my", placeholder = "Marital Status" })
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="form-group">
+                                <td>@Html.LabelFor(model => model.ResidentialAddress, "Residential Address")</td>
+                                <td>
+                                    <div>
+                                        @Html.EditorFor(model => model.ResidentialAddress, new { htmlAttributes = new { @class = "textbox-my", placeholder = "Residential Address", MaxLength = "128" } })
+                                        @Html.ValidationMessageFor(model => model.ResidentialAddress, "", new { @class = "text-danger" })
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="form-group">
+                                <td>@Html.LabelFor(model => model.PermanentAddress, "Permanent Address")</td>
+                                <td>
+                                    <div>
+                                        @Html.EditorFor(model => model.PermanentAddress, new { htmlAttributes = new { @class = "textbox-my", placeholder = "Permanent Address", MaxLength = "128" } })
+                                        @Html.ValidationMessageFor(model => model.PermanentAddress, "", new { @class = "text-danger" })
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <p class="JS_Education_Message" style="display: none;">@Html.Label("please provide values for each of the education fields below", new { @class = "text-danger" })</p>
+                        <table id="details_plain_small_education">
+                            <tr><td colspan="4"><hr /></td></tr>
+                            <tr>
+                                <td colspan="4">
+                                    <p class="section-heading2"><img width="35" height="30" src="~/Images/education.png"><span style="padding-left: 15px;">Educational Background</span></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>@Html.LabelFor(model => model.Education, "Qualification")</td>
+                                <td colspan="3">
+                                    @Html.EnumDropDownListFor(model => model.Education, new { @class = "textbox-my JS_DdlEducation ", placeholder = "Education" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>Marks %</td>
+                                <td>Subjects</td>
+                                <td>Institute</td>
+                            </tr>
+                            <tr class="JS_Matric">
+                                <td>
+                                    @Html.Label("Matric")
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model.MatricGpa, new { htmlAttributes = new { @class = "textbox-my JS_Education_Field JS_Marks", style = "width:60px;", placeholder = "%" } })
+                                    @Html.ValidationMessageFor(model => model.MatricGpa, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model.MatricSubjects, new { htmlAttributes = new { @class = "textbox-my JS_Education_Field", placeholder = "Core Subjects" } })
+                                    @Html.ValidationMessageFor(model => model.MatricSubjects, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model.MatricInstitution, new { htmlAttributes = new { @class = "textbox-my JS_Education_Field", placeholder = "Institution" } })
+                                    @Html.ValidationMessageFor(model => model.MatricInstitution, "", new { @class = "text-danger" })
+                                </td>
+                            </tr>
+                            <tr class="JS_Inter" style="display: none;">
+                                <td>
+                                    @Html.Label("Intermediate")
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model.IntermediateGpa, new
+                                    {
+                                        htmlAttributes = new
+                                        {
+                                            @class = "textbox-my JS_Education_Field JS_Marks",
+                                            style = "max-width:60px; padding: 6px 12px; line-height: 1.428571429; color: #555555; vertical-align: middle;", placeholder = " %"
+                                        }
+                                    })
+                                    @Html.ValidationMessageFor(model => model.IntermediateGpa, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model.IntermediateSubjects, new { htmlAttributes = new { @class = "textbox-my JS_Education_Field ", placeholder = "Core Subjects" } })
+                                    @Html.ValidationMessageFor(model => model.IntermediateSubjects, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model.IntermediateInstitution, new { htmlAttributes = new { @class = "textbox-my JS_Education_Field ", placeholder = "Institution" } })
+                                    @Html.ValidationMessageFor(model => model.IntermediateInstitution, "", new { @class = "text-danger" })
+                                </td>
+                            </tr>
+                            <tr class="JS_Graduation" style="display: none;">
+                                <td>
+                                    @Html.Label("Graduation")
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model.GraduationGpa, new { htmlAttributes = new { @class = "textbox-my JS_Education_Field JS_Marks ", style = "max-width:60px; padding: 6px 12px; line-height: 1.428571429; color: #555555; vertical-align: middle;", placeholder = "%" } })
+                                    @Html.ValidationMessageFor(model => model.GraduationGpa, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model.GraduationSubjects, new { htmlAttributes = new { @class = "textbox-my JS_Education_Field ", placeholder = "Core Subjects" } })
+                                    @Html.ValidationMessageFor(model => model.GraduationSubjects, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model.GraduationInstitution, new { htmlAttributes = new { @class = "textbox-my JS_Education_Field ", placeholder = "Institution" } })
+                                    @Html.ValidationMessageFor(model => model.GraduationInstitution, "", new { @class = "text-danger" })
+                                </td>
+                            </tr>
+                            <tr class="JS_Masters" style="display: none;">
+                                <td>
+                                    @Html.Label("Masters")
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model.MastersGpa, new { htmlAttributes = new { @class = "textbox-my JS_Education_Field JS_Marks ", style = "max-width:60px; padding: 6px 12px; line-height: 1.428571429; color: #555555; vertical-align: middle;", placeholder = "%" } })
+                                    @Html.ValidationMessageFor(model => model.MastersGpa, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model.MastersSubjects, new { htmlAttributes = new { @class = "textbox-my JS_Education_Field ", placeholder = "Core Subjects" } })
+                                    @Html.ValidationMessageFor(model => model.MastersSubjects, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model.MastersInstitution, new { htmlAttributes = new { @class = "textbox-my JS_Education_Field ", placeholder = "Institution" } })
+                                    @Html.ValidationMessageFor(model => model.MastersInstitution, "", new { @class = "text-danger" })
+                                </td>
+                            </tr>
+                            <tr class="JS_MS" style="display: none;">
+                                <td>
+                                    @Html.Label("MS")
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model.MsGpa, new { htmlAttributes = new { @class = "textbox-my JS_Education_Field JS_Marks ", style = "max-width:60px; padding: 6px 12px; line-height: 1.428571429; color: #555555; vertical-align: middle;", placeholder = "%" } })
+                                    @Html.ValidationMessageFor(model => model.MsGpa, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model.MsSubjects, new { htmlAttributes = new { @class = "textbox-my JS_Education_Field ", placeholder = "Core Subjects" } })
+                                    @Html.ValidationMessageFor(model => model.MsSubjects, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model.MsInstitution, new { htmlAttributes = new { @class = "textbox-my JS_Education_Field ", placeholder = "Institution" } })
+                                    @Html.ValidationMessageFor(model => model.MsInstitution, "", new { @class = "text-danger" })
+                                </td>
+                            </tr>
+                            <tr class="JS_PHD" style="display: none;">
+                                <td>
+                                    @Html.Label("PHD")
+                                </td>
+                                <td></td>
+                                <td>
+                                    @Html.EditorFor(model => model.PhdSubjects, new { htmlAttributes = new { @class = "textbox-my JS_Education_Field ", placeholder = "Core Subjects" } })
+                                    @Html.ValidationMessageFor(model => model.PhdSubjects, "", new { @class = "text-danger" })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model.PhdInstitution, new { htmlAttributes = new { @class = "textbox-my JS_Education_Field ", placeholder = "Institution" } })
+                                    @Html.ValidationMessageFor(model => model.PhdInstitution, "", new { @class = "text-danger" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>@Html.Label("Any Other")</td>
+                                <td></td>
+                                <td colspan="4">
+                                    @Html.EditorFor(model => model.OtherQualification, new { htmlAttributes = new { @class = "textbox-my ", placeholder = "Any Other Qualification" } })
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <table id="details_plain_small">
+                            <tr><td colspan="3"><hr /></td></tr>
+                            <tr>
+                                <td colspan="2">
+                                    <p class="section-heading2">Please select your current status</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="radio-my">
+                                        @Html.RadioButtonFor(p => p.CurrentStatus, "Professional", new { @class = "JS_CurrentStatus", id = "Professional" }) @Html.LabelFor(l => l.CurrentStatus, "Professional")
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="radio-my">
+                                        @Html.RadioButtonFor(p => p.CurrentStatus, "Businessman", new { @class = "JS_CurrentStatus", id = "Businessman" }) @Html.LabelFor(l => l.CurrentStatus, "Businessman")
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="radio-my">
+                                        @Html.RadioButtonFor(p => p.CurrentStatus, "Student", new { @class = "JS_CurrentStatus", id = "Student" }) @Html.LabelFor(l => l.CurrentStatus, "Student")
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <p class="JS_Current_Message" style="display: none;">@Html.Label("please provide values for each of the fields (in red) below", new { @class = "text-danger" })</p>
+                        <div class="JS_Profession">
+                            <table id="details_plain_small">
+                                <tr><td colspan="3"><hr /></td></tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <p class="section-heading2 JS_Headings_Pro"><img width="35" height="30" src="~/Images/profession.png"><span style="padding-left: 15px;">Profession</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("Current Job")</td>
+                                    <td>
+                                        <div>
+                                            @Html.EditorFor(model => model.CurrentJob, new { htmlAttributes = new { @class = "textbox-my JS_Current_Field ", MaxLength = "64", placeholder = "Current Job:" } })
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("Company Name")</td>
+                                    <td>
+                                        <div>
+                                            @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "textbox-my JS_Current_Field ", MaxLength = "64", placeholder = "Company Name:" } })
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("Designation")</td>
+                                    <td>
+                                        <div>
+                                            @Html.EditorFor(model => model.Designation, new { htmlAttributes = new { @class = "textbox-my JS_Current_Field ", MaxLength = "64", placeholder = "Designation:" } })
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("Total Job Experience")</td>
+                                    <td>
+                                        <div>
+                                            @Html.EditorFor(model => model.TotalJobExperience, new { htmlAttributes = new { @class = "textbox-my JS_Current_Field ", MaxLength = "64", placeholder = "Total Job Experience:" } })
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div style="display: none;" class="JS_Business">
+                            <table id="details_plain_small">
+                                <tr><td colspan="3"><hr /></td></tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <p class="section-heading2 JS_Headings_Bus"><img width="35" height="30" src="~/Images/business.png"><span style="padding-left: 15px;">Business</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("Business Name")</td>
+                                    <td>
+                                        <div>
+                                            @Html.EditorFor(model => model.BusinessName, new { htmlAttributes = new { @class = "textbox-my JS_Current_Field ", MaxLength = "64", placeholder = "Business Name:" } })
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("Business Area")</td>
+                                    <td>
+                                        <div>
+                                            @Html.EditorFor(model => model.BusinessArea, new { htmlAttributes = new { @class = "textbox-my JS_Current_Field ", MaxLength = "64", placeholder = "Business Area:" } })
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.Label("Business Nature")</td>
+                                    <td>
+                                        <div>
+                                            @Html.EditorFor(model => model.BusinessNature, new { htmlAttributes = new { @class = "textbox-my JS_Current_Field ", MaxLength = "64", placeholder = "Business Nature:" } })
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div>
+                        <table id="details_plain_small">
+                            <tr><td colspan="4"><hr /></td></tr>
+                            <tr>
+                                <td colspan="2">
+                                    <p class="section-heading2"><img width="35" height="30" src="~/Images/religious.png"><span style="padding-left: 15px;">Religious Education</span></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.LabelFor(model => model.AppliedBefore, "Applied in Al-Burhan before?")
+                                </td>
+                                <td>
+                                    @Html.CheckBoxFor(model => model.AppliedBefore, new { @class = "largerCheckbox" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.LabelFor(model => model.AnyReligiousEducation, "Any religious education?")
+                                </td>
+
+                                <td>
+                                    @Html.CheckBoxFor(model => model.AnyReligiousEducation, new { @class = "largerCheckbox" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.Label("Specify if Yes")
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model.ReligiousEducationSpecify, new { htmlAttributes = new { @class = "textbox-my", MaxLength = "128", placeholder = "Religious Education" } })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>@Html.Label("Any Other Expertise?")</td>
+                                <td>
+                                    @Html.EditorFor(model => model.AnyOtherExpertise, new { htmlAttributes = new { @class = "textbox-my", MaxLength = "128", placeholder = "other expertise?" } })
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    @if ((SessionHelper.LoggedInUser.UserType == UserType.Applicant ||
+                            SessionHelper.LoggedInUser.UserType == UserType.PaymentAdministrator ||
+                                SessionHelper.LoggedInUser.UserType == UserType.Ceo)
+                                &&
+                                (Model.RegistrationStatus != RegistrationStatus.Enrolled &&
+                                    Model.PaymentMethod != "InterviewDay"))
+                    {
+                        <div class="JS_InterviewSelectionShowHide">
+                            <table id="details_plain_small">
+                                <tr><td colspan="3"><hr /></td></tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <p class="section-heading2"><img width="35" height="30" src="~/Images/interview.png"><span style="padding-left: 15px;">Interview Details</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p>Change your interview date and time from the available slots</p>
+                                    </td>
+                                    <td>
+                                        <p>@Html.ValidationMessage("InterviewSlotOccupied", new { @class = "text-danger" })</p>
+                                        @Html.DropDownListFor(x => x.SelectedInterviewSlotId, new SelectList(Model.AvailableInterviewSlots, "InterviewSlotId", "Slot"), new { @class = "form-dropdown-my" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    }
+
+                    <div>
+                        <input type="submit" value="Save Details" class="btn btn-default submit_register button-my-apply" />
+                    </div>
+                    @*<br />*@
+                </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

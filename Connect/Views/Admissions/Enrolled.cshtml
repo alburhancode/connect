@@ -1,0 +1,309 @@
+﻿@model Connect.Models.Admissions.AdmissionViewModel
+@using System.Configuration;
+@using Connect.Classes.Helpers
+@using Connect.Classes
+@{
+    ViewBag.Title = "View";
+//    var rollNumberFormat = SessionHelper.LoggedInUser.Batch + "-";
+    var sectionCapacity = int.Parse(ConfigurationManager.AppSettings["SectionCapacity"]);
+    var loggedInUserType = SessionHelper.LoggedInUser.UserType;
+    var isForSistersOld = SessionHelper.LoggedInUser.Batch.Contains("-BW");
+    var isForKarachiOld = SessionHelper.LoggedInUser.Batch == "KHI-2019-B001";
+    var isForIslamabadOld = SessionHelper.LoggedInUser.Batch == "ISB-2019-B005";
+}
+
+<div style="font-size:smaller;" align="center" id="partial-enrolled">
+    <div align="center">
+        <b>Section Assignments</b>
+        <table border="1" cellpadding="5" style="text-align:center;">
+            <tr>
+                @foreach (var record in Model.Admissions.Where(s => s.RegistrationStatus == RegistrationStatus.Enrolled).GroupBy(c => new { c.Section }).Select(s => new { s.Key.Section, Count = s.Count() }).ToList().Where(s => !string.IsNullOrEmpty(s.Section)).OrderBy(s => s.Section))
+                {
+                    <td style="border: 1px solid gray;">
+                        <b>@record.Section</b>
+                    </td>
+                }
+            </tr>
+            <tr style="background-color:lightblue;">
+                @foreach (var record in Model.Admissions.Where(s => s.RegistrationStatus == RegistrationStatus.Enrolled).GroupBy(c => new { c.Section }).Select(s => new { s.Key.Section, Count = s.Count() }).ToList().Where(s => !string.IsNullOrEmpty(s.Section)).OrderBy(s => s.Section))
+                {
+                    <td style="border: 1px solid gray;">
+                        <b>@record.Count</b>
+                    </td>
+                }
+            </tr>
+        </table>
+    </div>
+    <br />
+
+    @if (loggedInUserType == Connect.Classes.DataModels.UserType.Ceo)
+    {
+        <div>
+            Emails not sent: <span style="color: red; font-size: large;" id="emailscount">@Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && !c.EmailSent)</span>,
+            Sections not assigned: <span style="color: red; font-size: large;" id="sectionscount">@Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && (string.IsNullOrEmpty(c.Section) || c.Section.ToLower() == "none" || c.Section.ToLower() == "notselected"))</span>
+        </div>
+
+        <div>
+            <table style="float:right;">
+                <tr>
+                    <td style="color: #32597c; font-size: large;">
+                        @if (isForSistersOld)
+                        {
+                            <b>
+                                Section:
+                                <select class="dropdown-section">
+                                    <option value="NotSelected">Please select</option>
+                                    <option value="None">None</option>
+                                    <option value="Section1A">Section-1A (Weekend)</option>
+                                    <option value="Section1B">Section-1B (WeekDays)</option>
+                                </select>
+                            </b>
+                        }
+                        else if (isForKarachiOld)
+                        {
+                            <b>
+                                Section:
+                                <select class="dropdown-section">
+                                    <option value="NotSelected">Please select</option>
+                                    <option value="None">None</option>
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "A") < sectionCapacity)
+                                    {
+                                        <option value="A">A</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "B") < sectionCapacity)
+                                    {
+                                        <option value="B">B</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "C") < sectionCapacity)
+                                    {
+                                        <option value="C">C</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "D") < sectionCapacity)
+                                    {
+                                        <option value="D">D</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "E") < sectionCapacity)
+                                    {
+                                        <option value="E">E</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "F") < sectionCapacity)
+                                    {
+                                        <option value="F">F</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "G") < sectionCapacity)
+                                    {
+                                        <option value="G">G</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "H") < sectionCapacity)
+                                    {
+                                        <option value="H">H</option>
+                                    }
+                                </select>
+                            </b>
+                        }
+                        else if (isForIslamabadOld)
+                        {
+                            <b>
+                                Section:
+                                <select class="dropdown-section">
+                                    <option value="NotSelected">Please select</option>
+                                    <option value="None">None</option>
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "Morning-5A") < sectionCapacity)
+                                    {
+                                        <option value="Morning-5A">Morning-5A</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "Morning-5B") < sectionCapacity)
+                                    {
+                                        <option value="Morning-5B">Morning-5B</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "Morning-5C") < sectionCapacity)
+                                    {
+                                        <option value="Morning-5C">Morning-5C</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "Morning-5D") < sectionCapacity)
+                                    {
+                                        <option value="Morning-5D">Morning-5D</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "Morning-5E") < sectionCapacity)
+                                    {
+                                        <option value="Morning-5E">Morning-5E</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "Morning-5F") < sectionCapacity)
+                                    {
+                                        <option value="Morning-5F">Morning-5F</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "Morning-5G") < sectionCapacity)
+                                    {
+                                        <option value="Morning-5G">Morning-5G</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "Morning-5H") < sectionCapacity)
+                                    {
+                                        <option value="Morning-5H">Morning-5H</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "Evening-5I") < sectionCapacity)
+                                    {
+                                        <option value="Evening-5I">Evening-5I</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "Evening-5J") < sectionCapacity)
+                                    {
+                                        <option value="Evening-5J">Evening-5J</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "Evening-5K") < sectionCapacity)
+                                    {
+                                        <option value="Evening-5K">Evening-5K</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "Evening-5L") < sectionCapacity)
+                                    {
+                                        <option value="Evening-5L">Evening-5L</option>
+                                    }
+                                </select>
+                            </b>
+                        }
+                        else
+                        {
+                            <b>
+                                Section:
+                                <select class="dropdown-section">
+                                    <option value="NotSelected">Please select</option>
+                                    <option value="None">None</option>
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "A") < sectionCapacity)
+                                    {
+                                        <option value="A">A</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "B") < sectionCapacity)
+                                    {
+                                        <option value="B">B</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "C") < sectionCapacity)
+                                    {
+                                        <option value="C">C</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "D") < sectionCapacity)
+                                    {
+                                        <option value="D">D</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "E") < sectionCapacity)
+                                    {
+                                        <option value="E">E</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "F") < sectionCapacity)
+                                    {
+                                        <option value="F">F</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "G") < sectionCapacity)
+                                    {
+                                        <option value="G">G</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "H") < sectionCapacity)
+                                    {
+                                        <option value="H">H</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "I") < sectionCapacity)
+                                    {
+                                        <option value="I">I</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "J") < sectionCapacity)
+                                    {
+                                        <option value="J">J</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "K") < sectionCapacity)
+                                    {
+                                        <option value="K">K</option>
+                                    }
+                                    @if (Model.Admissions.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled && c.Section == "L") < sectionCapacity)
+                                    {
+                                        <option value="L">L</option>
+                                    }
+                                </select>
+                            </b>
+
+                        }
+                    </td>
+                    <td>
+                        <button type="button" class="button-send-email" style="width:100px; border:none; float:right; padding:5px; background-color: #32597c;border-radius: 4px; color: lightblue; font-weight: bold;">Send Email</button>
+                    </td>
+                    <td>
+                        <button type="button" class="button-checkbox-undo-enrolled" style="width:100px; border:none; float:right; padding:5px; background-color: #32597c;border-radius: 4px; color: lightblue; font-weight: bold;">Undo Accept</button>
+                    </td>
+                    <td>
+                        <button type="button" class="button-checkbox-dropped" style="width:100px; border:none; float:right; padding:5px; background-color: #32597c;border-radius: 4px; color: lightblue; font-weight: bold;">Drop</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    }
+
+    <table id="details">
+        <tr>
+            <th>
+                <input type="checkbox" id="check_all">
+            </th>
+            <th>
+                <b>Name</b>
+            </th>
+            <th><b>Phone</b></th>
+            <th>
+                <b>Age</b>
+            </th>
+            <th>Username</th>
+            @if (SessionHelper.LoggedInUser.UserType == Connect.Classes.DataModels.UserType.Ceo)
+            {
+                <th>Ceo Grade</th>
+            }
+            <th>Email Sent</th>
+            <th>Section</th>
+            <th>Timing</th>
+            <th>Roll Number</th>
+        </tr>
+
+        @foreach (var item in Model.Admissions.OrderBy(a => a.Section).ThenByDescending(o => o.Age))
+        {
+            <tr>
+                <td><input type="checkbox" value=@item.IndividualId name="enrolled"></td>
+                <td>
+                    @Html.ActionLink(item.Name, "PreviewForAdmin", "Main", new { id = item.Id }, null)
+                </td>
+                <td>
+                    <span>0</span>@item.Phone
+                </td>
+                <td>@item.Age</td>
+                <td>
+                    @item.Email
+                </td>
+                @if (SessionHelper.LoggedInUser.UserType == Connect.Classes.DataModels.UserType.Ceo)
+                {
+                    <td>
+                        @item.CeoGradeValue
+                    </td>
+                }
+                <td>
+                    <p id=emailsent_@item.IndividualId>
+                        @item.EmailSent
+                    </p>
+                </td>
+                <td>
+                    <b id=section_@item.IndividualId>
+                        @item.Section
+                    </b>
+                </td>
+                <td>
+                    <p>
+                        @item.Timing
+                    </p>
+                </td>
+                <td>
+                    @if (item.RollNumber > 0)
+                    {
+                        @(item.RollNumberFormat + item.RollNumber.ToString().PadLeft(4, '0'))
+                    }
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

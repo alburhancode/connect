@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Connect.Models.Quiz.EventsOccurencesViewModel>
+
+    <p>
+        <button style="float:right; margin-bottom: 10px;" id='create-assessment' url='@Url.Action("CreateAssessment")'>Create an assessment</button>
+
+        <div id='gameModal3' class='modal' style="padding:50px;">
+            <div class="modal-assessments-create">
+                <button id="close-event-first-modal3" style="float:right; font-size: 18px; background-color:red;color:yellow; font-weight:bold;">x</button>
+                <div id='gameContainer3' style="padding: 20px;">
+                </div>
+            </div>
+        </div>
+    </p>
+    <div>
+        <table id="details_event">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Type)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Subject)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MaxMarks)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ConductedBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateConducted)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Subject)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MaxMarks)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ConductedBy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateConductedShort)
+                    </td>
+                    <td>
+                        <button style="float:right;" id='delete-assessment' url='@Url.Action("DeleteAssessment", new { id = item.EventId })'>Delete</button>
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+    </div>
+
+

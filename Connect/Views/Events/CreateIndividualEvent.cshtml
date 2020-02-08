@@ -1,0 +1,48 @@
+﻿@model Connect.Models.Quiz.CreateIndividualEventViewModel
+
+<div id="divCreateIndividualEvent" align="center">
+    <div class="form-horizontal" style="width:60%; padding: 60px;" align="center">
+        <h2>Individual Assessment</h2>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(m => m.IndividualId, new { @id = "hdnIndividualEventIndividualId" })
+        @if (Model.EventOccurences.Count > 0)
+        {
+            <div class="form-group">
+                <div>
+                    @Html.DropDownListFor(model => model.EventOccurences[0], new SelectList(Model.EventOccurences, "EventId", "AboutThisAssessment"), new { @class = "form-dropdown-my-assessments", @id = "dropdown-individual-event" })
+                    @Html.ValidationMessageFor(model => model.EventId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "textbox-my-bigger-assessments", placeholder = "Marks Obtained / Total Marks" } })
+                    @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    @Html.EditorFor(model => model.AdditionalText, new { htmlAttributes = new { @class = "textbox-my-bigger-assessments", placeholder = "Comments / Remarks / Any other information" } })
+                    @Html.ValidationMessageFor(model => model.AdditionalText, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div>
+                <button id="create-individual-event-post" class="button-my-assessments">Create</button>
+            </div>
+        }
+        else
+        {
+            <div align="center" style="color:slategray;">
+                <p><img width="90" height="60" src="~/Images/no-entry.png"></p>
+                <p><span style="font-size:40px;">There are no assessments to assign to this individual</span></p>
+                <h3>
+                    If you believe an assessment has not been marked or commented correctly, please delete the previous assignment and create a new one
+                </h3>
+            </div>
+        }
+    </div>
+</div>
+

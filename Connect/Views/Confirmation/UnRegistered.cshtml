@@ -1,0 +1,16 @@
+﻿@*@model Connect.Models.ConfirmationPages.ConfirmationViewModel*@
+
+@{
+    ViewBag.Title = "Registered";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <h4>An email was sent to you when you submitted your application. Please click the activation link in the email to activate your account.</h4>
+    <p>We recommend that you also check your spam folder if you did not get the email in your inbox. If you are unable to find your email, click resend activation email.
+        <input type="submit" value="Resend Email" style="border: solid #004242 2px; border-radius: 5px; background-color: black; color: white; font-family: calibri;" />
+    </p>
+}

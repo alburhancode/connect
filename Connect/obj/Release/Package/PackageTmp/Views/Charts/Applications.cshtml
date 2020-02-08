@@ -1,0 +1,42 @@
+﻿@*@model IEnumerable<Recruitwise.Models.Charts.ApplicationChartsViewModel>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Applications</title>
+</head>
+<body>
+    <p>
+        <img src="https://quickchart.io/chart?c={type:'doughnut',data:{labels:['January','February', 'March','April', 'May'], datasets:[{data:[50,60,70,180,190]}]}}">
+    </p>
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Campus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Count)
+            </th>
+        </tr>
+    
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Campus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Count)
+            </td>
+        </tr>
+    }
+    
+    </table>
+</body>
+</html>*@

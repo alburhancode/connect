@@ -1,0 +1,20 @@
+﻿@model Connect.Models.Preview.PreviewViewModel
+
+<div>
+    <h4>PreviewViewModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.InterviewSlot)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InterviewSlot)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) 
+    @Html.ActionLink("Back to List", "Index")
+</p>

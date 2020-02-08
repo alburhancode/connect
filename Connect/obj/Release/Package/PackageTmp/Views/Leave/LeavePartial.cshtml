@@ -1,0 +1,76 @@
+﻿@using Recruitwise.Classes.DataModels
+@using Recruitwise.Classes.Helpers
+@model IEnumerable<Recruitwise.Classes.DataModels.IndividualLeave>
+@{ 
+    var dayNow = Convert.ToDateTime(DateTime.Now.ToShortDateString());
+}
+
+<div id="divIndividualLeaves">
+    <table class="table">
+        <tr>
+            <th>
+                Date Of Leave
+            </th>
+            <th>
+                Reason
+            </th>
+            @if (SessionHelper.LoggedInUser.UserType == UserType.Applicant)
+            {
+                <th></th>
+            }
+        </tr>
+        <tr>
+            <th>
+                <input type="text" id="leaveDatepicker1" value="@DateTime.Now.AddDays(1).ToShortDateString()" readonly="readonly"/>
+            </th>
+            <th>
+                <input type="text" style="width: 90%;" id="reasonForLeave" value="I am not feeling well" />
+            </th>
+            @if (SessionHelper.LoggedInUser.UserType == UserType.Applicant)
+            {
+                <th>
+                    <input type="button" value="Add" id="leave-save-button-click"/>
+                </th>
+            }
+        </tr>
+        <tr>
+            <th colspan="3">
+                <hr />
+            </th>
+        </tr>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DateOfLeave)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reason)
+            </th>
+            @if (SessionHelper.LoggedInUser.UserType == UserType.Applicant)
+            {
+                <th></th>
+            }
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfLeave)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Reason)
+                </td>
+                @if (SessionHelper.LoggedInUser.UserType == UserType.Applicant
+                    && (item.DateOfLeave >= dayNow))
+                {
+                    <td>
+                        <span class="submit-leave-partial-delete" leaveid="@item.LeaveId" id="@item.Id">
+                            @Html.ActionLink("Delete", "")
+                        </span>
+                    </td>
+                }
+            </tr>
+        }
+
+    </table>
+</div>

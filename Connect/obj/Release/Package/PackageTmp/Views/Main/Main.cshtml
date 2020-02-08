@@ -1,0 +1,118 @@
+﻿@using Recruitwise.Classes.DataModels
+@using Recruitwise.Classes.Helpers
+@model Recruitwise.Models.Preview.PreviewViewModel
+@{
+    ViewBag.Title = "Main";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var userType = SessionHelper.LoggedInUser.UserType;
+    var isForSisters = SessionHelper.LoggedInUser.Batch.Contains("-BW");
+}
+
+<input type="hidden" individualid="@Model.Individual.IndividualId" id="hdnIndividualId" />
+<input type="hidden" individualguid="@Model.Individual.Id" id="hdnIndividualGuid" />
+
+<h4>@Model.Individual.Name</h4>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="tab">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a data_id="@Model.Individual.Id" href="#Section1" aria-controls="home" role="tab" data-toggle="tab">Details</a></li>
+
+                    @if (userType == UserType.AttendanceAdmin)
+                    {
+                        <li role="presentation"><a data_id="@Model.Individual.Id" href="#Section6" aria-controls="profile" role="tab" data-toggle="tab">Attendance</a></li>
+                        <li role="presentation"><a data_id="@Model.Individual.Id" href="#Section9" aria-controls="profile" role="tab" data-toggle="tab">Call History</a></li>
+                    }
+                    else
+                    {
+                        if (userType == UserType.Panel || userType == UserType.Ceo)
+                        {
+                            <li role="presentation"><a data_id="@Model.Individual.Id" href="#Section2" aria-controls="profile" role="tab" data-toggle="tab">Panel Grading (@(Model.Individual.PanelGradeValue != string.Empty ? Model.Individual.PanelGradeValue : "none"))</a></li>
+                            <li role="presentation"><a data_id="@Model.Individual.Id" href="#Section3" aria-controls="profile" role="tab" data-toggle="tab">Ceo Grading (@(Model.Individual.CeoGradeValue != string.Empty ? Model.Individual.CeoGradeValue : "none"))</a></li>
+                        }
+                        if (userType == UserType.PaymentAdministrator && !isForSisters)
+                        {
+                            <li role="presentation"><a data_id="@Model.Individual.Id" href="#Section4" aria-controls="profile" role="tab" data-toggle="tab">Payment (@Model.Individual.PaymentStatus)</a></li>
+                        }
+                        if (userType == UserType.Manager || userType == UserType.Ceo)
+                        {
+                            <li role="presentation"><a data_id="@Model.Individual.Id" href="#Section5" aria-controls="profile" role="tab" data-toggle="tab">Notes</a></li>
+                        }
+                        if (Model.Individual.RegistrationStatus == Recruitwise.Classes.RegistrationStatus.Enrolled)
+                        {
+                            <li role="presentation"><a data_id="@Model.Individual.Id" href="#Section6" aria-controls="profile" role="tab" data-toggle="tab">Attendance</a></li>
+                            <li role="presentation"><a data_id="@Model.Individual.Id" href="#Section7" aria-controls="profile" role="tab" data-toggle="tab">Quizzes </a></li>
+                            <li role="presentation"><a data_id="@Model.Individual.Id" href="#Section8" aria-controls="profile" role="tab" data-toggle="tab">Leaves</a></li>
+                        }
+                    }
+                </ul>
+            </div>
+
+            <div class="tab-content">
+                <div id="Section1" class="tab-pane fade in active">
+                    <br />
+                    <div>
+                        @{ Html.RenderAction("PreviewPartial", "Main", new { id = Model.Individual.Id }); }
+                    </div>
+                </div>
+                <div id="Section2" class="tab-pane fade">
+                    <br />
+                    <div>
+                        @{ Html.RenderAction("PanelGradingPartialGet", "Main", new { id = Model.Individual.Id }); }
+                    </div>
+                </div>
+                <div id="Section3" class="tab-pane fade">
+                    <br />
+                    <div>
+                        @{ Html.RenderAction("CeoGradingPartialGet", "Main", new { id = Model.Individual.Id }); }
+                    </div>
+                </div>
+                <div id="Section4" class="tab-pane fade">
+                    <br />
+                    <div>
+                        @{ Html.RenderAction("PaymentPartialGet", "Main", new { id = Model.Individual.Id }); }
+                    </div>
+                </div>
+                <div id="Section5" class="tab-pane fade">
+                    <br />
+                    <div>
+                        @{ Html.RenderAction("NotesPartialGet", "Main", new { id = Model.Individual.Id }); }
+                    </div>
+                </div>
+                <div id="Section6" class="tab-pane fade">
+                    <br />
+                    <div>
+                        @{ Html.RenderAction("AttendancePartialGet", "Main", new { id = Model.Individual.Id }); }
+                    </div>
+                </div>
+                <div id="Section8" class="tab-pane fade">
+                    <br />
+                    <div>
+                        @{ Html.RenderAction("LeavePartialGet", "Main", new { id = Model.Individual.Id }); }
+                    </div>
+                </div>
+                <div id="Section7" class="tab-pane fade">
+                    <br />
+                    <div>
+                        @{ Html.RenderAction("QuizzesPartialGet", "Main", new { id = Model.Individual.Id }); }
+                    </div>
+                </div>
+                <div id="Section9" class="tab-pane fade">
+                    <br />
+                    <div>
+                        @{ Html.RenderAction("CallHistoryPartialGet", "Main", new { id = Model.Individual.Id }); }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="previewindividual"></div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

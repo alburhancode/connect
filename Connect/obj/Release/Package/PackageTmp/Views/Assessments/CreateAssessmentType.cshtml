@@ -1,0 +1,25 @@
+﻿@model Recruitwise.Models.Quiz.CreateAssessmentTypeViewModel
+
+    <div class="form-horizontal" style="width:60%; padding: 60px;" align="center">
+        <h2>Create an assessment type and specify a subject</h2>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <div>
+                @Html.EditorFor(model => model.Type, new { htmlAttributes = new { @class = "textbox-my-bigger-assessments", placeholder = "Type of Assessment (eg. Quiz)" } })
+                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div>
+                @Html.EditorFor(model => model.Subject, new { htmlAttributes = new { @class = "textbox-my-bigger-assessments", placeholder = "Subject (eg: Seerat)" } })
+                @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div>
+            <button id='create-assessment-type-post' class="button-my-assessments">Create</button>
+        </div>
+    </div>
+

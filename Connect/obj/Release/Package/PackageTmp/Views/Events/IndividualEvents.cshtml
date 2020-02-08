@@ -1,0 +1,73 @@
+﻿@model IEnumerable<Recruitwise.Models.Quiz.IndividualEventViewModel>
+@{
+    ViewBag.Title = "View";
+}
+
+<div id="divIndividualEventOccurences">
+    <h2>@Session["IndividualTitle"]</h2>
+    <p>
+        <button class="button-my-assessments-medium" style="float:right;" id='create-individual-event' url='@Url.Action("CreateIndividualEvent", new { id = Session["IndividualId"] })'>Link an Assessment</button>
+        <br/>
+        <div id='gameModal2' class='modal'>
+            <div class="modal-assessments-create">
+                <button id="close-event-first-modal2" style="float:right; font-size: 18px; background-color:red;color:yellow; font-weight:bold;">x</button>
+                <div id='gameContainer2'>
+                </div>
+            </div>
+        </div>
+
+    </p>
+    <div>
+        <table id="details_event">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Type)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Subject)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Value)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AdditionalText)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateConducted)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ConductedBy)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Subject)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Value)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AdditionalText)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateConducted)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ConductedBy)
+                    </td>
+                    <td>
+                        <button id='delete-individual-event' url='@Url.Action("DeleteIndividualEvent", new { id = item.IndividualEventId, individualid = item.IndividualId })'>Delete</button>
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>

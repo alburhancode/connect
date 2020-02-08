@@ -1,0 +1,420 @@
+﻿@model Connect.Classes.DataModels.Individual
+
+<div>
+    <h4>Individual</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Phone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Phone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Password)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Password)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Age)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Age)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PaymentCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PaymentCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NicNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NicNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OtherContact)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OtherContact)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ResidentialAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ResidentialAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PermanentAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PermanentAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MatricGpa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MatricGpa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MatricSubjects)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MatricSubjects)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MatricInstitute)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MatricInstitute)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IntermediateGpa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IntermediateGpa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IntermediateSubjects)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IntermediateSubjects)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IntermediateInstitute)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IntermediateInstitute)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GraduationGpa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GraduationGpa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GraduationSubjects)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GraduationSubjects)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GraduationInstitute)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GraduationInstitute)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MastersGpa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MastersGpa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MastersSubjects)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MastersSubjects)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MastersInstitution)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MastersInstitution)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MsGpa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MsGpa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MsSubjects)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MsSubjects)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MsInstitution)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MsInstitution)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhdSubjects)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhdSubjects)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhdInstitution)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhdInstitution)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OtherQualification)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OtherQualification)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CurrentJob)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CurrentJob)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Designation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Designation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalJobExperience)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TotalJobExperience)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BusinessName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BusinessName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BusinessArea)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BusinessArea)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BusinessNature)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BusinessNature)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AppliedBefore)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AppliedBefore)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AnyReligiousEducation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AnyReligiousEducation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReligiousEducationSpecify)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReligiousEducationSpecify)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AnyOtherExpertise)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AnyOtherExpertise)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PaymentMethod)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PaymentMethod)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.InterviewSlotId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InterviewSlotId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CeoGradeValue)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CeoGradeValue)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PanelGradeValue)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PanelGradeValue)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Batch)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Batch)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FatherOrHusbandName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FatherOrHusbandName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ClassSelection)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClassSelection)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WhatsAppNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WhatsAppNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EducationDetails)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EducationDetails)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Responsibilities)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Responsibilities)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProfessionStudyBusinessDetails)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProfessionStudyBusinessDetails)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CityDetails)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CityDetails)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

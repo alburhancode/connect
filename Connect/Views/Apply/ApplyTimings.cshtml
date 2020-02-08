@@ -1,0 +1,28 @@
+﻿@model Connect.Models.ApplyTimingViewModel
+
+@if (Model.AvailableTimings != null)
+{
+    <div>
+        <table id="details_plain_small">
+            <tr>
+                <td colspan="3">
+                    <hr style="height: 0.5px; background-color: lightgray;" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <p class="section-heading2-sub"><span style="padding-left: 15px;">Timings</span></p>
+                </td>
+            </tr>
+
+            <tr class="form-group">
+                <td>@Html.Label("Please select your class timing for the course", new { @class = "label-simple-small" })</td>
+                <td>
+                    <div>
+                        @Html.DropDownListFor(x => x.SelectedBatchTimingId, new SelectList(Model.AvailableTimings, "BatchTimingId", "Timing"), new { @class = "form-dropdown-my" })
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+}

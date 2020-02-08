@@ -1,0 +1,410 @@
+﻿@*@using Recruitwise.Classes
+@using Recruitwise.Classes.DataModels
+@using Recruitwise.Classes.Helpers
+@model Recruitwise.Models.Preview.PreviewViewModel
+@{
+    ViewBag.Title = "Your Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Applicant's Details</h2>
+<hr />
+
+@if (Model.Individual.PaymentStatus == PaymentStatus.Blocked)
+{
+    <p><img src="~/Images/red-alert.png" width="25" height="25" /> Your account is no longer active. Please click Apply to start your application again.</p>
+}
+else if (Model.Individual.PaymentStatus == PaymentStatus.Declined)
+{
+    <p>
+        <img src="~/Images/red-alert.png" width="25" height="25" /> Your payment was declined. Please login to re-enter correct details of your payment.
+    </p>
+}
+else
+{
+    if (Model.Individual.RegistrationStatus != RegistrationStatus.Completed)
+    {
+        <p><img src="~/Images/alert-icon.png" width="25" height="25" /> Your application is not complete. You must complete your application for further processing. Click edit my details link below to proceed.</p>
+    }
+    if (Model.Individual.PaymentStatus == PaymentStatus.UnVerified && Model.Individual.PaymentMethod != "InterviewDay")
+    {
+        <p><img src="~/Images/alert-icon.png" width="25" height="25" /> Your application is being processed. Payment processing can take between 2 and 3 working days. Once verified, you will receive an e-mail.</p>
+    }
+    if (Model.Individual.RegistrationStatus == RegistrationStatus.Completed && Model.Individual.PaymentStatus == PaymentStatus.Verified)
+    {
+        <p><img src="~/Images/greentick-icon.png" width="25" height="25" /> Your application is complete. If you intend to change your details, you can edit your details by clicking the link below anytime till the last date of submission</p>
+    }
+    if (Model.Individual.RegistrationStatus == RegistrationStatus.Completed && Model.Individual.PaymentStatus == PaymentStatus.UnVerified && Model.Individual.PaymentMethod == "InterviewDay")
+    {
+        <p><img src="~/Images/alert-icon.png" width="25" height="25" /> Your application is with Al Burhan. We will inform you about your interview day and time. On the interview day, you will be required to pay the processing fee of Rs. 500</p>
+    }
+}
+
+<hr />
+
+<div>
+<table cellpadding="7" style="float:left;">
+    <tr>
+        <td>
+            @Html.Label("Name")
+        </td>
+        <td>
+            @Model.Individual.Name
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.Label("Email")
+        </td>
+        <td>
+            @Model.Individual.Email
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.Label("Phone")
+        </td>
+        <td>
+            @Model.Individual.Phone
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.Label("Cnic")
+        </td>
+        <td>
+            @Model.Individual.NicNumber
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.Label("Age")
+        </td>
+        <td>
+            @Model.Individual.Age
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.Label("Marital Status")
+        </td>
+        <td>
+            @Model.Individual.MaritalStatus
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.Label("Residential Address")
+        </td>
+        <td>
+            @Model.Individual.ResidentialAddress
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.Label("Permanent Address")
+        </td>
+        <td>
+            @Model.Individual.PermanentAddress
+        </td>
+    </tr>
+</table><div style="clear: both;"></div><div style="clear: both;"></div>
+<hr/>
+<table cellpadding="7" style="float:left;">
+<tr>
+    <td>
+        @Html.Label("Interview booked for ")
+    </td>
+    <td>
+        @if (!string.IsNullOrEmpty(Model.InterviewSlot))
+        {
+            <p style="font-size: 18px; color: green;"><b>@Model.InterviewSlot</b></p>
+        }
+        else
+        {
+            <p style="color: red;">You have not been assigned an interview slot yet.</p>   
+        }
+    </td>
+</tr>
+<tr>
+<td>
+    @Html.Label("Matric Marks")
+</td>
+<td>
+    @(Model.Individual.MatricGpa != null ? Model.Individual.MatricGpa.ToString() : "n/a")
+</td>
+<tr>
+    <td>
+        @Html.Label("Matric Subjects")
+    </td>
+    <td>
+        @(Model.Individual.MatricSubjects ?? "n/a")
+    </td>
+</tr>
+<tr>
+    <td>
+        @Html.Label("Matric Institute")
+    </td>
+    <td>
+        @(@Model.Individual.MatricInstitute ?? "n/a")
+    </td>
+</tr>
+</table><div style="clear: both;"></div>
+<hr/>
+<br/>
+<table cellpadding="7" style="float:left;">
+<tr>
+    <td>
+        @Html.Label("Intermediate Marks")
+    </td>
+    <td>
+        @(Model.Individual.IntermediateGpa != null ? Model.Individual.IntermediateGpa.ToString() : "n/a")
+    </td>
+</tr>
+<tr>
+    <td>
+        @Html.Label("Intermediate Subjects")
+    </td>
+    <td>
+        @(Model.Individual.IntermediateSubjects ?? "n/a")
+    </td>
+</tr>
+<tr>
+    <td>
+        @Html.Label("Intermediate Institute")
+    </td>
+    <td>
+        @(Model.Individual.IntermediateInstitute ?? "n/a")
+    </td>
+</tr>
+</table><div style="clear: both;"></div>
+        <hr/>
+<table cellpadding="7" style="float:left;">
+    <tr>
+        <td>
+            @Html.Label("Graduation Marks")
+        </td>
+        <td>
+            @(Model.Individual.GraduationGpa != null ? Model.Individual.GraduationGpa.ToString() : "n/a")
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.Label("Graduation Subjects")
+        </td>
+        <td>
+            @(Model.Individual.GraduationSubjects ?? "n/a")
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.Label("Graduation Institute")
+        </td>
+        <td>
+            @(Model.Individual.GraduationInstitute ?? "n/a")
+        </td>
+    </tr>
+</table><div style="clear: both;"></div>
+<hr/>
+    <table cellpadding="7" style="float:left;">
+
+        <tr>
+            <td>
+                @Html.Label("Masters Marks")
+            </td>
+            <td>
+                @(Model.Individual.MastersGpa != null ? Model.Individual.MastersGpa.ToString() : "n/a")
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.Label("Masters Subjects")
+            </td>
+            <td>
+                @(Model.Individual.MastersSubjects ?? "n/a")
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.Label("Masters Institute")
+            </td>
+            <td>
+                @(Model.Individual.MastersInstitution ?? "n/a")
+            </td>
+        </tr>
+
+
+    </table><div style="clear: both;"></div>
+    <hr />
+    <table cellpadding="7" style="float:left;">
+        <tr>
+            <td>
+                @Html.Label("MS Marks")
+            </td>
+            <td>
+                @(Model.Individual.MsGpa != null ? Model.Individual.MsGpa.ToString() : "n/a")
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.Label("MS Subjects")
+            </td>
+            <td>
+                @(Model.Individual.MsSubjects ?? "n/a")
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.Label("MS Institute")
+            </td>
+            <td>
+                @(Model.Individual.MsInstitution ?? "n/a")
+            </td>
+        </tr>
+
+
+    </table><div style="clear: both;"></div>
+    <hr />
+    <table cellpadding="7" style="float:left;">
+        <tr>
+            <td>
+                @Html.Label("PHD Subjects")
+            </td>
+            <td>
+                @(Model.Individual.PhdSubjects ?? "n/a")
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.Label("PHD Institute")
+            </td>
+            <td>
+                @(Model.Individual.PhdInstitution ?? "n/a")
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                @Html.Label("Other Qualification")
+            </td>
+            <td>
+                @(Model.Individual.OtherQualification ?? "n/a")
+            </td>
+        </tr>
+    </table><div style="clear: both;"></div>
+    <hr />
+    <table cellpadding="7" style="float:left;">
+        <tr>
+            <td>
+                @Html.Label("Current Job")
+            </td>
+            <td>
+                @(Model.Individual.CurrentJob ?? "n/a")
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                @Html.Label("Company Name")
+            </td>
+            <td>
+                @(Model.Individual.CompanyName ?? "n/a")
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                @Html.Label("Designation")
+            </td>
+            <td>
+                @(Model.Individual.Designation ?? "n/a")
+            </td>
+        </tr>
+
+
+        <tr>
+            <td>
+                @Html.Label("Total Experience")
+            </td>
+            <td>
+                @(Model.Individual.TotalJobExperience ?? "n/a")
+            </td>
+        </tr>
+
+    </table><div style="clear: both;"></div>
+    <hr />
+    <table cellpadding="7" style="float:left;">
+        <tr>
+            <td>
+                @Html.Label("Business Name")
+            </td>
+            <td>
+                @(Model.Individual.BusinessName ?? "n/a")
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                @Html.Label("Business Area")
+            </td>
+            <td>
+                @(Model.Individual.BusinessArea ?? "n/a")
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                @Html.Label("Business Nature")
+            </td>
+            <td>
+                @(Model.Individual.BusinessNature ?? "n/a")
+            </td>
+        </tr>
+
+    </table><div style="clear: both;"></div>
+    <hr />
+    <table cellpadding="7" style="float:left;">
+        <tr>
+            <td>
+                @Html.Label("Applied Before ?")
+            </td>
+            <td>
+                @(Model.Individual.AppliedBefore ? "yes" : "no")
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                @Html.Label("Any religious education?")
+            </td>
+            <td>
+                @(Model.Individual.AnyReligiousEducation ? "yes" : "no")
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                @Html.Label("Religious Education")
+            </td>
+            <td>
+                @(Model.Individual.ReligiousEducationSpecify ?? "n/a")
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                @Html.Label("Any Other Expertise")
+            </td>
+            <td>
+                @(Model.Individual.AnyOtherExpertise ?? "n/a")
+            </td>
+        </tr>
+
+
+    </table><div style="clear: both;"></div>
+</div>
+@if (SessionHelper.LoggedInUser.UserType == UserType.Applicant)
+{
+    <p style="float: right;">@Html.ActionLink("Edit my details", "Register", "Signup", new { id = Model.Individual.Id }, null)</p>
+}
+<br/>*@

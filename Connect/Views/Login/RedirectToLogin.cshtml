@@ -1,0 +1,7 @@
+﻿@using Connect.Classes.Helpers;
+<noscript>
+    <meta http-equiv="refresh" content="0; url=@UrlBuilder.Url("Login", "Authenticate")" />
+</noscript>
+<script type="text/javascript">
+    window.location = '@Url.Action("Authenticate", "Login")';
+</script>

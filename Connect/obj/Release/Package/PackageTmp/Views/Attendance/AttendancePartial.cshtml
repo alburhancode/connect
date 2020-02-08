@@ -1,0 +1,119 @@
+﻿@using Recruitwise.Classes.DataModels
+@using Recruitwise.Classes.Helpers
+@model IEnumerable<Recruitwise.Classes.DataModels.IndividualAttendance>
+@{
+    var totalPresent = Model.Count(p => p.Status == 1);
+    var totalAbsent = Model.Count(p => p.Status == 0);
+    var totalLeaves = Model.Count(p => p.Status == 2);
+    var attendancePercentage = totalAbsent == 0 ? 100 : (totalPresent * 100) / (totalPresent + totalAbsent);
+}
+<div id="divIndividualAttendance">
+    <table border="1" cellpadding="4" style="text-align:center;">
+        <tr>
+            <td style="border: 1px solid gray;">Present</td>
+            <td>Absent</td>
+            <td>Leaves</td>
+            <td>Average %</td>
+        </tr>
+        <tr>
+            <td>@totalPresent</td>
+            <td>@totalAbsent</td>
+            <td>@totalLeaves</td>
+            <td>
+                @if (attendancePercentage >= 90)
+                {
+                    <span style="color:darkgreen; font-weight:bold; font-size:larger;">@attendancePercentage</span>
+                }
+                else if (attendancePercentage < 90 && attendancePercentage >= 80)
+                {
+                    <span style="color:orange; font-weight:bold; font-size:larger;">@attendancePercentage</span>
+                }
+                else if (attendancePercentage < 80)
+                {
+                    <span style="color:red; font-weight:bold; font-size:larger;">@attendancePercentage</span>
+                }
+            </td>
+        </tr>
+    </table>
+
+    @if (SessionHelper.LoggedInUser.UserType == UserType.Ceo)
+    {
+        <div style="float:right;">
+            @Html.ActionLink("Back to List", "GetIntervieweesForCeo", "Interview")
+        </div>
+    }
+    else if (SessionHelper.LoggedInUser.UserType == UserType.Panel)
+    {
+        <div style="float:right;">
+            @Html.ActionLink("Back to List", "GetIntervieweesForPanel", "Interview")
+        </div>
+    }
+
+    <table id="details">
+        <tr>
+            <th>Subject</th>
+            <th>Status</th>
+            <th>Attendance Created</th>
+            <th>Attendance Updated</th>
+
+            @if (SessionHelper.LoggedInUser.UserType != UserType.Applicant)
+            {
+                <th colspan="2">Change Status to</th>
+            }
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Subject
+                </td>
+                @if (item.Status == 0)
+                {
+                    <td style="color:orangered;">Absent</td>
+                }
+                else if (item.Status == 1)
+                {
+                    <td style="color:green;">Present</td>
+                }
+                else if (item.Status == 2)
+                {
+                    <td style="color:blueviolet;">Leave</td>
+                }
+                <td>
+                    @item.AttendanceTakenOn
+                </td>
+
+                <td>
+                    @(item.AttendanceUpdatedOn == DateTime.MinValue || item.AttendanceUpdatedOn.ToString("dd/MM/yyyy") == "01/01/1900" ? "n/a" : item.AttendanceUpdatedOn.ToString())
+                </td>
+
+                @if (SessionHelper.LoggedInUser.UserType != UserType.Applicant)
+                {
+                    if (item.Status != 0)
+                    {
+                        <td>
+                            <input type="button" style="width:100%; background-color: orangered; color:white; font-weight:bold; border:none;" value="Absent" id="attendance-toggle-button-click" status="0" attendanceid="@item.AttendanceId" />
+                        </td>
+                    }
+                    if (item.Status != 1)
+                    {
+                        <td>
+                            <input type="button" style="width:100%; background-color: green; color:white; font-weight:bold; border:none;" value="Present" id="attendance-toggle-button-click" status="1" attendanceid="@item.AttendanceId" />
+                        </td>
+                    }
+                    if (item.Status != 2)
+                    {
+                        <td>
+                            <input type="button" style="width:100%; background-color: blueviolet; color:white; font-weight:bold; border:none;" value="Leave" id="attendance-toggle-button-click" status="2" attendanceid="@item.AttendanceId" />
+                        </td>
+                    }
+                }
+
+            </tr>
+        }
+
+    </table>
+    <div class="ajax_loader" style="display:none;"></div>
+</div>
+

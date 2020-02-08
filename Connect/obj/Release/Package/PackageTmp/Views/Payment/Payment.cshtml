@@ -1,0 +1,422 @@
+﻿@using Recruitwise.Classes
+@using Recruitwise.Models
+@model Recruitwise.Models.Payment.PaymentViewModel
+
+@{
+    ViewBag.Title = "Payment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <h5 style="font-weight: bold;">Total @Model.Payments.Count()</h5>
+    <h5><b>By Profession</b> Professional @Model.Payments.Count(c => c.CurrentStatusValue == CurrentStatus.Professional.ToString()), Businessmen @Model.Payments.Count(c => c.CurrentStatusValue == CurrentStatus.Businessman.ToString()), Students @Model.Payments.Count(c => c.CurrentStatusValue == CurrentStatus.Student.ToString()), Unknown Status @Model.Payments.Count(c => c.CurrentStatusValue == null), InComplete Form @Model.Payments.Count(c => c.RegistrationStatus != RegistrationStatus.Completed)</h5>
+    <h5><b>By Payment Status</b> Verified @Model.Payments.Count(c => c.PaymentStatus == PaymentStatus.Verified), UnVerified @Model.Payments.Count(c => c.PaymentStatus == PaymentStatus.UnVerified), Declined @Model.Payments.Count(c => c.PaymentStatus == PaymentStatus.Declined), Blocked @Model.Payments.Count(c => c.PaymentStatus == PaymentStatus.Blocked)</h5>
+    <hr />
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tab">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation"><a href="#Section3" aria-controls="messages" role="tab" data-toggle="tab">OnSpot Payment(@Model.Payments.Count(c => c.PaymentStatus == PaymentStatus.UnVerified && c.PaymentMethod == "InterviewDay"))</a></li>
+                    <li role="presentation" class="active"><a href="#Section1" aria-controls="home" role="tab" data-toggle="tab">UnVerified(@Model.Payments.Count(c => c.PaymentStatus == PaymentStatus.UnVerified && c.PaymentMethod != "InterviewDay"))</a></li>
+                    <li role="presentation"><a href="#Section2" aria-controls="profile" role="tab" data-toggle="tab">Payment Verified(@Model.Payments.Count(c => c.PaymentStatus == PaymentStatus.Verified && (c.RegistrationStatus == RegistrationStatus.UnRegistered || c.RegistrationStatus == RegistrationStatus.Registered || c.RegistrationStatus == RegistrationStatus.Completed)))</a></li>
+                    <li role="presentation"><a href="#Section5" aria-controls="messages" role="tab" data-toggle="tab">Declined(@Model.Payments.Count(c => c.PaymentStatus == PaymentStatus.Declined))</a></li>
+                    <li role="presentation"><a href="#Section7" aria-controls="messages" role="tab" data-toggle="tab">Interviewed (@Model.Payments.Count(c => c.RegistrationStatus == RegistrationStatus.CeoInterviewed))</a></li>
+                    <li role="presentation"><a href="#Section6" aria-controls="messages" role="tab" data-toggle="tab">Blocked (@Model.Payments.Count(c => c.PaymentStatus == PaymentStatus.Blocked))</a></li>
+                    <li role="presentation"><a href="#Section8" aria-controls="messages" role="tab" data-toggle="tab">Enrolled (@Model.Payments.Count(c => c.RegistrationStatus == RegistrationStatus.Enrolled))</a></li>
+                </ul>
+            </div>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane fade in active" id="Section1">
+                    <div>
+                        @{ Html.RenderAction("UnVerifiedPartialGet", "Payment"); }
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="Section2">
+                    <div style="font-size:smaller;" align="center">
+                        <table id="details">
+                            <tr>
+                                <th>
+                                    <b>Name</b>
+                                </th>
+                                @*<th>
+                                    <b>Payment Method</b>
+                                </th>
+                                <th>
+                                    <b>Payment Code</b>
+                                </th>*@
+                                <th><b>Phone</b></th>
+                                <th>Age</th>
+                                <th>Username</th>
+                                @*<th>Password</th>*@
+                                <th>Current Status</th>
+                                <th>Application Status</th>
+                                <th>Interview</th>
+                                <th>Created</th>
+                            </tr>
+
+                            @foreach (var item in Model.Payments.Where(c => c.PaymentStatus == PaymentStatus.Verified && (c.RegistrationStatus == RegistrationStatus.UnRegistered || c.RegistrationStatus == RegistrationStatus.Registered || c.RegistrationStatus == RegistrationStatus.Completed)))
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.ActionLink(item.Name + item.LastName, "PreviewForAdmin", "Main", new { id = item.Id }, null)
+                                    </td>
+                                    @*<td>
+                                        @item.PaymentMethod
+                                    </td>
+                                    <td>
+                                        @item.PaymentCode
+                                    </td>*@
+                                    <td>
+                                        <span>0</span>@item.Phone
+                                    </td>
+                                    <td>@item.Age</td>
+                                    <td>
+                                        @item.Email
+                                    </td>
+                                    @*<td>
+                                @item.Password
+                            </td>*@
+                                    <td>
+                                        @item.CurrentStatusValue
+                                    </td>
+                                    <td>
+                                        @if (item.RegistrationStatus == RegistrationStatus.Completed)
+                                        {
+                                            <b style="color: darkgreen;">Complete</b>
+                                        }
+                                        else if (item.RegistrationStatus == RegistrationStatus.Registered || item.RegistrationStatus == RegistrationStatus.UnRegistered)
+                                        {
+                                            <b style="color: red;">InComplete</b>
+                                        }
+                                    </td>
+                                    <td>
+                                        @item.Slot
+                                    </td>
+                                    <td>
+                                        @item.Created
+                                    </td>
+                                </tr>
+                            }
+
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="Section3">
+                    <div style="font-size:smaller; overflow: auto;" align="center">
+                        <table id="details">
+                            <tr>
+                                <th>
+                                    <b>Name</b>
+                                </th>
+                                @*<th>
+                                    <b>Payment Method</b>
+                                </th>*@
+                                <th><b>Phone</b></th>
+                                <th>Age</th>
+                                <th>Username</th>
+                                @*<th>Password</th>*@
+                                <th>Status</th>
+                                <th>Interview</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+
+                            @foreach (var item in Model.Payments.Where(c => c.PaymentStatus == PaymentStatus.UnVerified && c.PaymentMethod == "InterviewDay"))
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.ActionLink(item.Name + item.LastName, "PreviewForAdmin", "Main", new { id = item.Id }, null)
+                                    </td>
+                                    @*<td>
+                                        @item.PaymentMethod
+                                    </td>*@
+                                    <td>
+                                        <span>0</span>@item.Phone
+                                    </td>
+                                    <td>@item.Age</td>
+                                    <td>
+                                        @item.Email
+                                    </td>
+                                    @*<td>
+                                @item.Password
+                            </td>*@
+                                    <td>
+                                        @if (item.RegistrationStatus == RegistrationStatus.Completed)
+                                        {
+                                            @item.CurrentStatus.ToString()
+                                        }
+                                        else if (item.RegistrationStatus == RegistrationStatus.Registered || item.RegistrationStatus == RegistrationStatus.UnRegistered)
+                                        {
+                                            <b style="color: red;">InComplete Form</b>
+                                        }
+                                    </td>
+                                    <td>
+                                        @item.Slot
+                                    </td>
+                                    <td class="JS_PaymentPass">
+                                        @Html.ActionLink("Pass", "UpdateStatus", "Payment", new { id = item.Id, email = item.Email, isPass = true }, null)
+                                    </td>
+                                    <td class="JS_PaymentFail">
+                                        @Html.ActionLink("Fail", "UpdateStatus", "Payment", new { id = item.Id, email = item.Email, isPass = false }, null)
+                                    </td>
+                                </tr>
+                            }
+
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="Section5">
+                    <div style="font-size:smaller; overflow: auto;" align="center">
+                        <table id="details">
+                            <tr>
+                                <th>
+                                    <b>Name</b>
+                                </th>
+                                @*<th>
+                                    <b>Payment Method</b>
+                                </th>
+                                <th>
+                                    <b>Payment Code</b>
+                                </th>*@
+                                <th><b>Phone</b></th>
+                                <th>Age</th>
+                                <th>Username</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+
+                            @foreach (var item in Model.Payments.Where(s => s.PaymentStatus == PaymentStatus.Declined))
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.ActionLink(item.Name + item.LastName, "PreviewForAdmin", "Main", new { id = item.Id }, null)
+                                    </td>
+                                    @*<td>
+                                        @item.PaymentMethod
+                                    </td>
+                                    <td>
+                                        @item.PaymentCode
+                                    </td>*@
+                                    <td>
+                                        <span>0</span>@item.Phone
+                                    </td>
+                                    <td>@item.Age</td>
+                                    <td>
+                                        @item.Email
+                                    </td>
+                                    <td>
+                                        @if (item.RegistrationStatus == RegistrationStatus.Completed)
+                                        {
+                                            @item.CurrentStatus.ToString()
+                                        }
+                                        else if (item.RegistrationStatus == RegistrationStatus.Registered || item.RegistrationStatus == RegistrationStatus.UnRegistered)
+                                        {
+                                            <b style="color: black;">InComplete Form</b>
+                                        }
+                                    </td>
+                                    <td>
+                                        @item.Created
+                                    </td>
+                                    <td class="JS_PaymentPass">
+                                        @Html.ActionLink("Pass", "UpdateStatus", "Payment", new { id = item.Id, email = item.Email, isPass = true }, null)
+                                    </td>
+                                    <td class="JS_PaymentFail">
+                                        @Html.ActionLink("Remind", "UpdateStatus", "Payment", new { id = item.Id, email = item.Email, isPass = false }, null)
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Block", "UpdateStatus", "Payment", new { id = item.Id, email = item.Email, isPass = false, isBlocked = true }, null)
+                                    </td>
+                                </tr>}
+
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="Section6">
+                    <div style="font-size:smaller; overflow: auto;" align="center">
+                        <table id="details">
+                            <tr>
+                                <th>
+                                    <b>Name</b>
+                                </th>
+                                @*<th>
+                                    <b>Payment Method</b>
+                                </th>
+                                <th>
+                                    <b>Payment Code</b>
+                                </th>*@
+                                <th><b>Phone</b></th>
+                                <th>Age</th>
+                                <th>Username</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                            </tr>
+
+                            @foreach (var item in Model.Payments.Where(s => s.PaymentStatus == PaymentStatus.Blocked))
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.ActionLink(item.Name + item.LastName, "PreviewForAdmin", "Main", new { id = item.Id }, null)
+                                    </td>
+                                    @*<td>
+                                        @item.PaymentMethod
+                                    </td>
+                                    <td>
+                                        @item.PaymentCode
+                                    </td>*@
+                                    <td>
+                                        <span>0</span>@item.Phone
+                                    </td>
+                                    <td>@item.Age</td>
+                                    <td>
+                                        @item.Email
+                                    </td>
+                                    <td>
+                                        @if (item.RegistrationStatus == RegistrationStatus.Completed)
+                                        {
+                                            @item.CurrentStatus.ToString()
+                                        }
+                                        else if (item.RegistrationStatus == RegistrationStatus.Registered || item.RegistrationStatus == RegistrationStatus.UnRegistered)
+                                        {
+                                            <b style="color: black;">InComplete Form</b>
+                                        }
+                                    </td>
+                                    <td>
+                                        @item.Created
+                                    </td>
+                                </tr>
+                            }
+
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="Section7">
+                    <div style="font-size:smaller; overflow: auto;" align="center">
+                        <table id="details">
+                            <tr>
+                                <th>
+                                    <b>Name</b>
+                                </th>
+                                @*<th>
+                                    <b>Payment Method</b>
+                                </th>
+                                <th>
+                                    <b>Payment Code</b>
+                                </th>*@
+                                <th><b>Phone</b></th>
+                                <th>Username</th>
+                            </tr>
+
+                            @foreach (var item in Model.Payments.Where(c => c.RegistrationStatus == RegistrationStatus.CeoInterviewed))
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.ActionLink(item.Name + item.LastName, "PreviewForAdmin", "Main", new { id = item.Id }, null)
+                                    </td>
+                                    @*<td>
+                                        @item.PaymentMethod
+                                    </td>
+                                    <td>
+                                        @if (item.PaymentCode == "")
+                                        {
+                                            <p style="text-align:center; background-color:red; color:yellow">
+                                                <b>"Not Paid" or "Not Updated on the System"</b>
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            @item.PaymentCode
+                                        }
+                                    </td>*@
+                                    <td>
+                                        <span>0</span>@item.Phone
+                                    </td>
+                                    <td>
+                                        @item.Email
+                                    </td>
+                                </tr>
+                            }
+
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="Section8">
+                    <div style="font-size:smaller; overflow: auto;" align="center">
+                        <table id="details">
+                            <tr>
+                                <th>
+                                    <b>Name</b>
+                                </th>
+                                @*<th>
+                                    <b>Payment Method</b>
+                                </th>
+                                <th>
+                                    <b>Payment Code</b>
+                                </th>*@
+                                <th><b>Phone</b></th>
+                                <th>Username</th>
+                                <th>Whats App Number</th>
+                                <th>Password</th>
+                            </tr>
+
+                            @foreach (var item in Model.Payments.Where(c => c.RegistrationStatus == RegistrationStatus.Enrolled))
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.ActionLink(item.Name + item.LastName, "PreviewForAdmin", "Main", new { id = item.Id }, null)
+                                    </td>
+                                    @*<td>
+                                        @item.PaymentMethod
+                                    </td>
+                                    <td>
+                                        @if (item.PaymentCode == "")
+                                        {
+                                            <p style="text-align:center; background-color:red; color:yellow">
+                                                <b>"Not Paid" or "Not Updated on the System"</b>
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            @item.PaymentCode
+                                        }
+                                    </td>*@
+                                    <td>
+                                        <span>0</span>@item.Phone
+                                    </td>
+                                    <td>
+                                        @item.Email
+                                    </td>
+                                    <td>
+                                        @if ("0"+item.Phone.ToString() != item.WhatsAppNumber.ToString())
+                                        {
+                                            <span style="color: green; font-weight: bold;">@item.WhatsAppNumber</span>
+                                        }
+                                        else
+                                        {
+                                            @item.WhatsAppNumber
+                                        }
+                                    </td>
+                                    <td>
+                                        @item.Password
+                                    </td>
+                                </tr>
+                            }
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

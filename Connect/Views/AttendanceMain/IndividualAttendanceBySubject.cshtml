@@ -1,0 +1,73 @@
+﻿@model Connect.Models.Quiz.IndividualAttendanceBySectionViewModel
+@using Connect.Classes.Helpers;
+@{
+    var subjects = SessionHelper.LoggedInUser.Subject.OrderBy(p => p.Substring(0)).ToList();
+}
+
+<div id="individual-attendance-by-subject">
+    <div style="float:right;">
+        <table>
+            <tr>
+                <td style="color: slategray;">
+                    <b>Subject</b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DropDownList("Subject", new SelectList(subjects), new { @class = "form-dropdown-my-assessments-smaller js_subjects_attendance", @id = "dropdown-subject-attendance" })
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <table id="details_event">
+        <tr>
+            <th>
+                RollNumber
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Attendance count
+            </th>
+            <th style="color:lightgreen;">
+                Present %
+            </th>
+            <th style="color:orange;">
+                Absent %
+            </th>
+            <th style="color:lightblue;">
+                Leave %
+            </th>
+        </tr>
+
+        @foreach (var item in Model.AttendanceSummary)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RollNumber)
+                </td>
+                <td>
+                    @Html.ActionLink(item.Name, "PreviewForAdmin", "Main", null, new { id = item.Id, target = "_blank" })
+                    @*@Html.DisplayFor(modelItem => item.Name)*@
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalCount)
+                </td>
+                <td>
+                    <b>@Html.DisplayFor(modelItem => item.Present) %</b> <span style="font-size: x-small;">(@Html.DisplayFor(modelItem => item.PresentCount))</span>
+                </td>
+                <td>
+                    <b>@Html.DisplayFor(modelItem => item.Absent) %</b> <span style="font-size: x-small;">(@Html.DisplayFor(modelItem => item.AbsentCount))</span>
+                </td>
+                <td>
+                    <b>@Html.DisplayFor(modelItem => item.Leave) %</b> <span style="font-size: x-small;">(@Html.DisplayFor(modelItem => item.LeaveCount))</span>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+

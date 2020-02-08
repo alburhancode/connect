@@ -1,0 +1,45 @@
+﻿@using Connect.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Al Burhan Login";
+}
+
+@using (Html.BeginForm("Authenticate", "Login", FormMethod.Post, new { ViewBag.ReturnUrl }))
+{
+    @Html.AntiForgeryToken()
+
+    @*<div align="center">
+        <img style="padding: 15px;" src="~/Images/burhan2.png" width="180" height="180" />
+    </div>*@
+    <div class="form-horizontal" align="center" style="padding: 5px;">
+        @if (Model.HasAuthenticationFailed)
+        {
+            <p style="display: block; color: red;">@Model.AuthenticationErrorMessage</p>
+        }
+        @*<p><b>@Html.ActionLink("Click Here", "apply", "apply")</b> to apply for batch 5 admission</p>*@
+        <div>
+            @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "textbox-login", placeholder = "e-mail address" } })
+            @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+        </div>
+        <div>
+            @Html.PasswordFor(model => model.Password, new { @class = "textbox-login JS_Password_Login", MaxLength = "25", MinLength = "6", placeholder = "password" })
+            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+        </div>
+        <table>
+            <tr>
+                <td align="center">
+                    <p style="padding-top:25px;">@Html.ActionLink("e-mail me", "ForgotPassword", new LoginViewModel()) my password</p>
+                </td>
+                <td align="center">
+                    <div style="padding-top: 10px; padding-left: 50px;">
+                        <input type="submit" value="Login" class="btn button-login" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+}
+
+@Scripts.Render("~/bundles/ui")
+
+

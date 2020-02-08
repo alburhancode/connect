@@ -1,0 +1,43 @@
+﻿﻿@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<div align="center">
+    <img style="padding: 15px;" src="~/Images/burhan2.png" width="180" height="180" />
+</div>*@
+
+<p style="font-family: calibri;"><h4>Thank you for submitting your initial details. We <span style="color: red;">require more details</span> from you to complete your application.</h4></p>
+<hr />
+<p>
+    <table>
+        <tr>
+            <td>
+                <u><b>Step 1 </b></u>
+            </td>
+            <td>
+                <b style="padding-left: 15px;">Activate your account</b> by clicking the link sent to your registered email address
+            </td>
+        </tr>
+        @*<tr>
+                <td>
+                    <u><b>Step 2 </b></u>
+                </td>
+                <td style="padding-left: 15px;">
+                    Wait for the <b>payment verification</b> by our team. (takes between 2 and 3 working days)
+                </td>
+            </tr>*@
+        <tr>
+            <td>
+                <u><b>Step 2 </b></u>
+            </td>
+            <td style="padding-left: 15px;">
+                Login with your username and password to <b>provide the remaining details</b>
+            </td>
+        </tr>
+    </table>
+</p>
+<hr />
+<p style="font-size: 18px;">
+    You can <b><u>@Html.ActionLink("login", "Authenticate", "Login")</u></b> anytime using your <b>email address</b> and <b>password</b> to find the status of your application.
+</p>
+

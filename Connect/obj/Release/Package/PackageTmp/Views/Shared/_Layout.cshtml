@@ -1,0 +1,109 @@
+﻿﻿@using Recruitwise.Classes.Helpers
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/themes/base/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div align="center" style="margin-top:40px;"><img src="~/Images/burhan.jpg" width="95" height="95" /></div>
+
+    @if (SessionHelper.LoggedInUser != null && SessionHelper.LoggedInUser.Batch != null && SessionHelper.LoggedInUser.Batch.Contains("-BW"))
+    {
+        <div class="navbar navbar-inverse navbar-fixed-top" style="background-color: #001c01;">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        @if (SessionHelper.LoggedInUser != null)
+                        {
+                            if (SessionHelper.LoggedInUser.UserType == Recruitwise.Classes.DataModels.UserType.Ceo)
+                            {
+                                <li>@Html.ActionLink("Interviews", "GetIntervieweesForCeo", "Interview", null, new { @class = "navbar-brand" })</li>
+                                <li>@Html.ActionLink("Admissions", "GetCandidatesForCeoDecision", "Admissions", null, new { @class = "navbar-brand" })</li>
+                                <li>@Html.ActionLink("Quizzes", "Index", "Events", null, new { @class = "navbar-brand" })</li>
+                            }
+
+                            if (SessionHelper.LoggedInUser.UserType == Recruitwise.Classes.DataModels.UserType.Ceo || 
+                                SessionHelper.LoggedInUser.UserType == Recruitwise.Classes.DataModels.UserType.AttendanceAdmin)
+                            {
+                                <li>@Html.ActionLink("Attendance", "Index", "AttendanceMain", null, new { @class = "navbar-brand" })</li>
+                            }
+
+                            <li><b>@Html.ActionLink("Logout", "Logout", "Login", null, new { @class = "navbar-brand", style = "float:right;" })</b></li>
+
+                        }
+                        else
+                        {
+                            <li>@Html.ActionLink("Login", "Authenticate", "Login", null, new { @class = "navbar-brand" })</li>
+                        }
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="navbar navbar-inverse navbar-fixed-top" style="background-color: #32597c;">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        @if (SessionHelper.LoggedInUser != null)
+                        {
+                            if (SessionHelper.LoggedInUser.UserType == Recruitwise.Classes.DataModels.UserType.Ceo)
+                            {
+                                <li>@Html.ActionLink("Interviews", "GetIntervieweesForCeo", "Interview", null, new { @class = "navbar-brand" })</li>
+                                <li>@Html.ActionLink("Admissions", "GetCandidatesForCeoDecision", "Admissions", null, new { @class = "navbar-brand" })</li>
+                                <li>@Html.ActionLink("Quizzes", "Index", "Events", null, new { @class = "navbar-brand" })</li>
+                            }
+
+                            if (SessionHelper.LoggedInUser.UserType == Recruitwise.Classes.DataModels.UserType.Ceo ||
+                                SessionHelper.LoggedInUser.UserType == Recruitwise.Classes.DataModels.UserType.AttendanceAdmin)
+                            {
+                                <li>@Html.ActionLink("Attendance", "Index", "AttendanceMain", null, new { @class = "navbar-brand" })</li>
+                            }
+
+                            <li><b>@Html.ActionLink("Logout", "Logout", "Login", null, new { @class = "navbar-brand", style = "float:right;" })</b></li>
+
+                        }
+                        else
+                        {
+                            <li>@Html.ActionLink("Login", "Authenticate", "Login", null, new { @class = "navbar-brand" })</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+    <div style="height: 5px;"></div>
+    <div class="container body-content" align="center">
+        @RenderBody()
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Al Burhan Institute</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryui")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

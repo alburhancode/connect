@@ -1,0 +1,142 @@
+﻿@using Connect.Classes
+@using Connect.Classes.DataModels
+@using Connect.Classes.Helpers
+@model Connect.Models.Records.RecordsViewModel
+
+@{
+    ViewBag.Title = "Records";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Records</h2>
+<h5>Payments Verified = @Model.Individuals.Count(i => i.State == StatesEnum.StepThreeCompleted && i.PaymentVerified)</h5>
+<h5>Payments Verification Pending = @Model.Individuals.Count(i => i.State == StatesEnum.StepThreeCompleted && !i.PaymentVerified && i.PaymentCode != null)</h5>
+<h5>Payment Declined = @Model.Individuals.Count(i => i.State == StatesEnum.StepThreeCompleted && !i.PaymentVerified && i.PaymentCode == null)</h5>
+<h5>Total Applied = @Model.Individuals.Count(i => i.UserType == UserType.Applicant)</h5>
+<h5>Enrolled = @Model.Individuals.Count(i => i.State == StatesEnum.Enrolled)</h5>
+
+<div style="font-size:smaller; overflow: auto;" align="center">
+    <table style="width: 90%">
+        <tr style="background-color: #004242; color: white;">
+            <th style="padding: 5px;">
+                @Html.Label("Name")
+            </th>
+            <th>
+                @Html.Label("CNIC")
+            </th>
+            <th>Payment</th>
+            <th>Payment Code</th>
+            <th>Panel Grade</th>
+            <th>Ceo Grade</th>
+            <th>% age</th>
+            <th></th>
+        @if (SessionHelper.LoggedInUser.UserType == UserType.Administrator)
+        {
+            <th>Enrol</th>
+        }
+        </tr>
+
+        @foreach (var item in Model.Individuals)
+        {
+            @*if (item.State == StatesEnum.Enrolled)
+            {
+                <tr style="background-color: #ebf2d3; border: solid 1px yellowgreen;">
+                    <td style="padding-top:5px;">
+                        @Html.Label(item.Name) 
+                    </td>
+                    <td>
+                        @Html.Label(item.NicNumber.ToString())
+                    </td>
+                    <td>
+                        @if (item.State == StatesEnum.StepThreeCompleted && item.PaymentVerified)
+                        {
+                            <span style="background-color: green; padding: 5px; color: white;">Verified</span>
+                        }
+                        else if (item.State == StatesEnum.StepThreeCompleted && !item.PaymentVerified && item.PaymentCode != null)
+                        {
+                            <span style="background-color: blueviolet; padding: 5px; color: white;">Pending</span>
+                        }
+                        else if (item.State == StatesEnum.StepThreeCompleted && !item.PaymentVerified && item.PaymentCode == null)
+                        {
+                            <span style="background-color: red; padding: 5px; color: white;">Declined</span>
+                        }
+                        else
+                        {
+                            <span style="background-color: gray; padding: 5px; color: white;">Not Paid</span>
+                        }
+                    </td>
+                    <td>
+                        @Html.ActionLink("Preview", "Preview", "Preview", new { id = item.Id }, null)
+                    </td>
+                </tr>
+            }
+            else
+            {*@
+            <tr style="background-color: #ffebcd; border: solid 1px yellowgreen;">
+                <td style="padding-top:5px;">
+                    @Html.Label(item.Name) @Html.Label(item.LastName)
+                </td>
+                <td>
+                    @Html.Label(item.NicNumber.ToString())
+                </td>
+                <td>
+                    @if (item.State == StatesEnum.StepThreeCompleted && item.PaymentVerified)
+                    {
+                        <span style="background-color: green; padding: 5px; color: white;">Verified</span>
+                    }
+                    else if (item.State == StatesEnum.StepThreeCompleted && !item.PaymentVerified && item.PaymentCode != null)
+                    {
+                        <span style="background-color: blueviolet; padding: 5px; color: white;">Pending</span>
+                    }
+                    else if (item.State == StatesEnum.StepThreeCompleted && !item.PaymentVerified && item.PaymentCode == null)
+                    {
+                        <span style="background-color: red; padding: 5px; color: white;">Declined</span>
+                    }
+                    else if (item.State == StatesEnum.Enrolled && item.PaymentVerified)
+                    {
+                        <span style="background-color: green; padding: 5px; color: white;">Verified</span>
+                    }
+                    else
+                    {
+                        <span style="background-color: gray; padding: 5px; color: white;">Not Paid</span>
+                    }
+                </td>
+                <td>@item.PaymentCode</td>
+                <td>@item.PanelGrade.ToString().Replace("Plus","+")</td>
+                <td>@item.CeoGrade.ToString().Replace("Plus","+")</td>
+                @if (item.PanelGrade == 0 || item.CeoGrade == 0)
+                {
+                    <td>N/A</td>
+                }
+                else
+                {
+                    <td>@item.Grade</td>
+                }
+                <td>
+                    @Html.ActionLink("Preview", "Preview", "Preview", new { id = item.Id }, null)
+                </td>
+                @if (SessionHelper.LoggedInUser.UserType == UserType.Administrator)
+                {
+                    if (item.State == StatesEnum.Enrolled)
+                    {
+                         <td class="JS_Enrol">
+                             <span style="background-color: black; padding: 5px; font-weight: bold;">@Html.ActionLink("Undo", "UndoPass", "Home", new { id = item.Id }, null)</span>
+                         </td>
+                    }
+                    else
+                    {
+                         <td class="JS_Enrol">
+                             @Html.ActionLink("Confirm", "Pass", "Home", new { id = item.Id }, null)
+                         </td>
+                    }
+                }
+            </tr>
+            @*}*@
+        }
+
+    </table>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,119 @@
+﻿@model Connect.Models.Payment.PaymentViewModel
+@using Connect.Classes
+
+@*<div style="float:right;">
+    @Html.ActionLink("Back to List", "Get", "Payment")
+</div>*@
+
+<div id="divUnverifiedPayments">
+    <table style="float:right;">
+        <tr>
+            <td>
+                <button type="button" class="button-remind-all-incomplete" style="border:none; padding:5px; background-color: black;border-radius: 4px; color: white; font-weight: bold;">Remind All In-Complete</button>
+            </td>
+        </tr>
+    </table>
+    <table id="details_plain_small">
+        <tr>
+            <th>
+                <b>Name</b>
+            </th>
+            @*<th>
+            <b>Payment Method</b>
+        </th>
+        <th>
+            <b>Payment Code</b>
+        </th>*@
+            <th><b>Phone</b></th>
+            <th>Age</th>
+            <th>Username</th>
+            <th>WhatsApp Number</th>
+            <th>Password</th>
+            <th>Current Status</th>
+            <th>Application Status</th>
+            <th>Interview</th>
+            <th>Timing</th>
+            <th>Created</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>Last Reminded</th>
+        </tr>
+
+        @foreach (var item in Model.Payments.Where(s => s.PaymentStatus == PaymentStatus.UnVerified && s.PaymentMethod != "InterviewDay"))
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(item.Name + item.LastName, "PreviewForAdmin", "Main", new { id = item.Id }, null)
+                </td>
+                @*<td>
+                        @item.PaymentMethod
+                    </td>
+                    <td>
+                        @item.PaymentCode
+                    </td>*@
+                <td>
+                    <span>0</span>@item.Phone
+                </td>
+                <td>@item.Age</td>
+                <td>
+                    @item.Email
+                </td>
+                <td>@item.WhatsAppNumber</td>
+                <td>
+                        @item.Password
+                </td>
+                <td>
+                    @item.CurrentStatusValue
+                </td>
+                <td>
+                    @if (item.RegistrationStatus == RegistrationStatus.Completed)
+                    {
+                        <b style="color: darkgreen;">Complete</b>
+                    }
+                    else if (item.RegistrationStatus == RegistrationStatus.Registered || item.RegistrationStatus == RegistrationStatus.UnRegistered)
+                    {
+                        <b style="color: red;">InComplete</b>
+                    }
+                </td>
+                <td>
+                    @item.Slot
+                </td>
+                <td>@item.Timing</td>
+                <td>
+                    @item.Created
+                </td>
+                <td class="JS_PaymentPass">
+                    @Html.ActionLink("Pass", "UpdateStatus", "Payment", new { id = item.Id, email = item.Email, isPass = true }, null)
+                </td>
+                <td class="JS_PaymentFail">
+                    @Html.ActionLink("Fail", "UpdateStatus", "Payment", new { id = item.Id, email = item.Email, isPass = false }, null)
+                </td>
+
+                @if (item.RegistrationStatus == RegistrationStatus.Registered || item.RegistrationStatus == RegistrationStatus.UnRegistered)
+                {
+                    <td class="JS_PaymentFail" style="font-weight:bold;">
+                        @*<img width="30" height="30" src="~/Images/Reject.png">*@
+                        @*@Html.ActionLink("Remind", "SendInCompleteFormReminder", "Payment", new { id = item.Id, email = item.Email }, null)*@
+                        <button identifier="@item.Id" type="button" class="button-remind-single" style="border:none; padding:5px; background-color: royalblue;border-radius: 4px; color: white; font-weight: bold;">Remind</button>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <img width="30" height="30" src="~/Images/Accept.png">
+                    </td>
+                }
+
+                @if (item.DateLastReminded.HasValue)
+                {
+                    <td>
+                        @item.DateLastReminded
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+    <div class="ajax_loader" style="display:none;"></div>
+
+</div>

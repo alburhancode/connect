@@ -1,0 +1,51 @@
+﻿@using Recruitwise.Classes.DataModels
+@using Recruitwise.Classes.Helpers
+@model IEnumerable<Recruitwise.Classes.DataModels.Note>
+
+
+<div id="divIndividualNotes">
+    @if (SessionHelper.LoggedInUser.UserType == UserType.Ceo)
+    {
+        <div style="float:right;">
+            @Html.ActionLink("Back to List", "GetIntervieweesForCeo", "Interview")
+        </div>
+    }
+    else if (SessionHelper.LoggedInUser.UserType == UserType.Panel)
+    {
+        <div style="float:right;">
+            @Html.ActionLink("Back to List", "GetIntervieweesForPanel", "Interview")
+        </div>
+    }
+
+    <div id="div-notes-dialog">
+        <input type="text" id="textbox-note" style="width:90%; height:30px;" />
+        <input type="button" value="Save this note" id="note-save-button-click" />
+    </div>
+    <br />
+
+    <table id="details">
+        <tr>
+            <th>Note</th>
+            <th>Created Date</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.NoteText
+                </td>
+                <td>
+                    @item.Created
+                </td>
+                @*<td>
+                        <span class="submit-notes-partial-delete" noteid="@item.NoteId" id="@item.Id">
+                            @Html.ActionLink("Delete", "")
+                        </span>
+                    </td>*@
+            </tr>
+        }
+
+    </table>
+</div>
+

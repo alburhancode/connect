@@ -1,0 +1,417 @@
+﻿﻿@using Connect.Classes
+@using Connect.Classes.DataModels
+@using Connect.Classes.Helpers
+@model Connect.Models.Interview.PanelGradingViewModel
+@{
+    IEnumerable<Connect.Models.Interview.Grade> grades = new List<Connect.Models.Interview.Grade>
+    {
+        new Connect.Models.Interview.Grade
+        {
+            GradeId = 6,
+            GradeValue = "A+"
+        },
+        new Connect.Models.Interview.Grade
+        {
+            GradeId = 5,
+            GradeValue = "A"
+        },
+        new Connect.Models.Interview.Grade
+        {
+            GradeId = 4,
+            GradeValue = "A-"
+        },
+        new Connect.Models.Interview.Grade
+        {
+            GradeId = 3,
+            GradeValue = "B+"
+        },
+        new Connect.Models.Interview.Grade
+        {
+            GradeId = 2,
+            GradeValue = "B"
+        },
+        new Connect.Models.Interview.Grade
+        {
+            GradeId = 1,
+            GradeValue = "C"
+        },
+        new Connect.Models.Interview.Grade
+        {
+            GradeId = 7,
+            GradeValue = "Listener"
+        },
+        new Connect.Models.Interview.Grade
+        {
+            GradeId = 8,
+            GradeValue = "Not Graded"
+        }
+    };
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+
+    if (SessionHelper.LoggedInUser.UserType == UserType.Ceo)
+    {
+        <div style="float:right;">
+            @Html.ActionLink("Back to List", "GetIntervieweesForCeo", "Interview")
+        </div>
+    }
+    else if (SessionHelper.LoggedInUser.UserType == UserType.Panel)
+    {
+        <div style="float:right;">
+            @Html.ActionLink("Back to List", "GetIntervieweesForPanel", "Interview")
+        </div>
+    }
+
+        <div class="form-horizontal">
+            @*<h2>@Model.Name</h2>
+            <hr />*@
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <table style="background-color: #F8F8F8; color: #32597c; font-size: 16px;" cellpadding="15">
+                <thead>
+                    <p class="section-heading2">OVERALL COMMENTS AND GRADES</p>
+                </thead>
+                <tr>
+                    <td width="25%" style="padding-left: 100px;">
+                        <b>Overall Comments</b>
+                    </td>
+                    <td width="30%">
+                        <div>
+                            <div style="margin-left: 10px;">
+                                @Html.EditorFor(model => model.PanelComments, new { htmlAttributes = new { @class = "form-control", MaxLength = "2048", rows = 4 } })
+                                @Html.ValidationMessageFor(model => model.PanelComments, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%" style="padding-left: 100px;">
+                        <b>Overall Grade</b>
+                    </td>
+                    <td width="30%">
+                        <div>
+                            <div style="margin-left: 10px;">
+                                <p>@Html.ValidationMessage("Grade", new { @class = "text-danger" })</p>
+                                @Html.DropDownListFor(x => x.PanelGrade, new SelectList(grades, "GradeId", "GradeValue"), "please select a grade", new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            @if ((SessionHelper.LoggedInUser.UserType == UserType.Panel || SessionHelper.LoggedInUser.UserType == UserType.Ceo) && (Model.RegistrationStatus == RegistrationStatus.UnRegistered || Model.RegistrationStatus == RegistrationStatus.Registered || Model.RegistrationStatus == RegistrationStatus.Completed || Model.RegistrationStatus == RegistrationStatus.PanelInterviewed))
+            {
+                <div class="form-group">
+                    <div>
+                        <input type="submit" id="SubmitPanelGrading1" value="Submit" class="btn btn-default button-my" />
+                    </div>
+                </div>
+            }
+
+            <table style="background-color: #F8F8F8; color: #32597c; font-size: 16px;" cellpadding="15">
+                <thead>
+                    <p class="section-heading2">INTRODUCTION (4 minutes)</p>
+                </thead>
+                <tr>
+                    <td width="25%" style="padding-left: 100px;">
+                        Please take a minute and walk us through your profile - both academic & professional but focus more on key highlights
+                    </td>
+                    <td width="30%">
+                        <div>
+                            <div style="margin-left: 10px;">
+                                @Html.EditorFor(model => model.IntroProfileDescription, new { htmlAttributes = new { @class = "form-control", MaxLength = "1024", rows = 2 } })
+                                @Html.ValidationMessageFor(model => model.IntroProfileDescription, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%" style="padding-left: 100px;">
+                        What are your key achievements in your academic, professional career, in family or towards community
+                    </td>
+                    <td width="30%">
+                        <div>
+                            <div style="margin-left: 10px;">
+                                @Html.EditorFor(model => model.IntroKeyAchievements, new { htmlAttributes = new { @class = "form-control", MaxLength = "1024", rows = 2 } })
+                                @Html.ValidationMessageFor(model => model.IntroKeyAchievements, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <br />
+
+            <table style="background-color: #F8F8F8; color: #32597c; font-size: 16px;" cellpadding="15">
+                <thead>
+                    <p class="section-heading2">MOTIVATION TO JOIN THE COURSE (2 minute)</p>
+                </thead>
+
+                <tr>
+                    <td width="25%" style="padding-left: 100px;">
+                        Why do you want to enroll in this course? How would it help you?
+                    </td>
+                    <td width="30%">
+                        <div>
+                            <div style="margin-left: 10px;">
+                                @Html.EditorFor(model => model.MotivationReasonForEnrollment, new { htmlAttributes = new { @class = "form-control", MaxLength = "1024", rows = 2 } })
+                                @Html.ValidationMessageFor(model => model.MotivationReasonForEnrollment, "", new { @class = "text-danger" })
+                                <br />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%" style="padding-left: 100px;">
+                        Are there any specific goals which you want to achieve through this course?
+                    </td>
+                    <td width="30%">
+                        <div>
+                            <div style="margin-left: 10px;">
+                                @Html.EditorFor(model => model.MotivationGoals, new { htmlAttributes = new { @class = "form-control", MaxLength = "1024", rows = 2 } })
+                                @Html.ValidationMessageFor(model => model.MotivationGoals, "", new { @class = "text-danger" })
+                                <br />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%" style="padding-left: 100px;">
+                        What would you do if you are not selected for this course?
+                    </td>
+                    <td width="30%">
+                        <div>
+                            <div style="margin-left: 10px;">
+                                @Html.EditorFor(model => model.MotivationIfNotSelected, new { htmlAttributes = new { @class = "form-control", MaxLength = "1024", rows = 2 } })
+                                @Html.ValidationMessageFor(model => model.MotivationIfNotSelected, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <br />
+
+            <table style="background-color: #F8F8F8; color: #32597c; font-size: 16px;" cellpadding="15">
+                <thead>
+                    <p class="section-heading2">STRENGTHS OF THE CANDIDATE (4 minutes)</p>
+                </thead>
+                <tr>
+                    <td width="25%" style="padding-left: 100px;">
+                        What are your top two strengths? If we ask your boss or your friend, what would they say about you?
+                    </td>
+                    <td width="30%">
+                        <div>
+                            <div style="margin-left: 10px;">
+                                @Html.EditorFor(model => model.StrengthsTopTwo, new { htmlAttributes = new { @class = "form-control", MaxLength = "1024", rows = 2 } })
+                                @Html.ValidationMessageFor(model => model.StrengthsTopTwo, "", new { @class = "text-danger" })
+                                <br />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%" style="padding-left: 100px;">
+                        What are your hobbies? What do you do in your free time? Do you write? Do you read? etc
+                    </td>
+                    <td width="30%">
+                        <div>
+                            <div style="margin-left: 10px;">
+                                @Html.EditorFor(model => model.StrengthsHobbies, new { htmlAttributes = new { @class = "form-control", MaxLength = "1024", rows = 2 } })
+                                @Html.ValidationMessageFor(model => model.StrengthsHobbies, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <br />
+
+            <table style="background-color: #F8F8F8; color: #32597c; font-size: 16px;" cellpadding="15">
+                <thead>
+                    <p class="section-heading2">COMMITMENT AND CONSISTENCY (4 Minutes)</p>
+                </thead>
+                <tr>
+                    <td width="25%" style="padding-left: 100px;">
+                        Have you enrolled in any course before? (Ask about duration and how much did it benefit you) / Have you done any Dawah work?
+                    </td>
+                    <td width="30%">
+                        <div>
+                            <div style="margin-left: 10px;">
+                                @Html.EditorFor(model => model.CommittmentAnyCourseBefore, new { htmlAttributes = new { @class = "form-control", MaxLength = "1024", rows = 2 } })
+                                @Html.ValidationMessageFor(model => model.CommittmentAnyCourseBefore, "", new { @class = "text-danger" })
+                                <br />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%" style="padding-left: 100px;">
+                        Do you fulfill your promises? Any examples where you fulfilled your promises with your Parents, Teachers, Class mates, clients etc?
+                    </td>
+                    <td width="30%">
+                        <div>
+                            <div style="margin-left: 10px;">
+                                @Html.EditorFor(model => model.CommittmentFulfillPromises, new { htmlAttributes = new { @class = "form-control", MaxLength = "1024", rows = 2 } })
+                                @Html.ValidationMessageFor(model => model.CommittmentFulfillPromises, "", new { @class = "text-danger" })
+                                <br />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%" style="padding-left: 100px;">
+                        Give us an example from your academic or professional career or general life which shows us that you show a good commitment to the responsibilities or your own goals? It could be your project or an assignment etc
+                    </td>
+                    <td width="30%">
+                        <div>
+                            <div style="margin-left: 10px;">
+                                @Html.EditorFor(model => model.CommittmentExample, new { htmlAttributes = new { @class = "form-control", MaxLength = "1024", rows = 2 } })
+                                @Html.ValidationMessageFor(model => model.CommittmentExample, "", new { @class = "text-danger" })
+                                <br />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%" style="padding-left: 100px;">
+                        Have you faced any failures or any challenging situations in your life in general? Share an example, How did you respond?
+                    </td>
+                    <td width="30%">
+                        <div>
+                            <div style="margin-left: 10px;">
+                                @Html.EditorFor(model => model.CommittmentFailures, new { htmlAttributes = new { @class = "form-control", MaxLength = "1024", rows = 2 } })
+                                @Html.ValidationMessageFor(model => model.CommittmentFailures, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <br />
+
+            <table style="background-color: #F8F8F8; color: #32597c; font-size: 16px;" cellpadding="15">
+                <thead>
+                    <p class="section-heading2">Any additional Skills And Contribution to his community (1 Minute)</p>
+                </thead>
+                <tr>
+                    <td width="25%" style="padding-left: 100px;">
+                        Any other details which you would like to mention which convince us that we should select you?
+                    </td>
+                    <td width="30%">
+                        <div>
+                            <div style="margin-left: 10px;">
+                                @Html.EditorFor(model => model.AdditionalSkillsAnyOther, new { htmlAttributes = new { @class = "form-control", MaxLength = "1024", rows = 2 } })
+                                @Html.ValidationMessageFor(model => model.AdditionalSkillsAnyOther, "", new { @class = "text-danger" })
+                                <br />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%" style="padding-left: 100px;">
+                        How are you generally when it comes to your friends, neighbours or society in general? Any achievements on the community side?
+                    </td>
+                    <td width="30%">
+                        <div>
+                            <div style="margin-left: 10px;">
+                                @Html.EditorFor(model => model.AdditionalSkillsSocial, new { htmlAttributes = new { @class = "form-control", MaxLength = "1024", rows = 2 } })
+                                @Html.ValidationMessageFor(model => model.AdditionalSkillsSocial, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <br />
+
+            <table style="background-color: #F8F8F8; color: #32597c; font-size: 16px;" cellpadding="5">
+                <thead>
+                    <p class="section-heading2">GRADES</p>
+                </thead>
+                <tr>
+                    <td width="25%" style="padding-left: 100px;">
+                        Commitment and Consistency
+                    </td>
+                    <td width="30%">
+                        <div>
+                            <div style="margin-left: 10px;">
+                                @*<p>@Html.ValidationMessage("GradeCommitment", new { @class = "text-danger" })</p>*@
+                                @Html.DropDownListFor(x => x.GradeCommitment, new SelectList(grades, "GradeId", "GradeValue"), "please select a grade", new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%" style="padding-left: 100px;">
+                        Key strength (writing skills, personality, confidence, people skills, communication)
+                    </td>
+                    <td width="30%">
+                        <div>
+                            <div style="margin-left: 10px;">
+                                @*<p>@Html.ValidationMessage("GradeStrengths", new { @class = "text-danger" })</p>*@
+                                @Html.DropDownListFor(x => x.GradeStrengths, new SelectList(grades, "GradeId", "GradeValue"), "please select a grade", new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%" style="padding-left: 100px;">
+                        Passion to seek ilm / Desire for learning
+                    </td>
+                    <td width="30%">
+                        <div>
+                            <div style="margin-left: 10px;">
+                                @*<p>@Html.ValidationMessage("GradePassion", new { @class = "text-danger" })</p>*@
+                                @Html.DropDownListFor(x => x.GradePassion, new SelectList(grades, "GradeId", "GradeValue"), "please select a grade", new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%" style="padding-left: 100px;">
+                        Functional Expertise in his area
+                    </td>
+                    <td width="30%">
+                        <div>
+                            <div style="margin-left: 10px;">
+                                @*<p>@Html.ValidationMessage("GradeFunctionalExpertise", new { @class = "text-danger" })</p>*@
+                                @Html.DropDownListFor(x => x.GradeFunctionalExpertise, new SelectList(grades, "GradeId", "GradeValue"), "please select a grade", new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%" style="padding-left: 100px;">
+                        Existing affiliation with Deen
+                    </td>
+                    <td width="30%">
+                        <div>
+                            <div style="margin-left: 10px;">
+                                @*<p>@Html.ValidationMessage("GradeExistingAffiliation", new { @class = "text-danger" })</p>*@
+                                @Html.DropDownListFor(x => x.GradeExistingAffiliation, new SelectList(grades, "GradeId", "GradeValue"), "please select a grade", new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <br />
+
+            @if ((SessionHelper.LoggedInUser.UserType == UserType.Panel || SessionHelper.LoggedInUser.UserType == UserType.Ceo) && (Model.RegistrationStatus == RegistrationStatus.UnRegistered || Model.RegistrationStatus == RegistrationStatus.Registered || Model.RegistrationStatus == RegistrationStatus.Completed || Model.RegistrationStatus == RegistrationStatus.PanelInterviewed))
+            {
+                <div class="form-group">
+                    <div>
+                        <input type="submit" id="SubmitPanelGrading2" value="Submit" class="btn btn-default button-my" />
+                    </div>
+                </div>
+            }
+
+        </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "GetIntervieweesForPanel", "Interview")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

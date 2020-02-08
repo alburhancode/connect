@@ -1,0 +1,7 @@
+﻿@using System.Configuration
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p><h3>Due to the dealine, we are no longer accepting the applications. Please stay tuned for the next intake through our adertisements on social media and friends. <br/><br/>The last date to apply was <b>@int.Parse(ConfigurationManager.AppSettings["DeadlineDate"])-@int.Parse(ConfigurationManager.AppSettings["DeadlineMonth"])-@int.Parse(ConfigurationManager.AppSettings["DeadlineYear"])</b></h3></p> 

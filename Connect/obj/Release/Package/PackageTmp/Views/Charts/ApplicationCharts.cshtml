@@ -1,0 +1,37 @@
+﻿﻿@model IEnumerable<Recruitwise.Models.Charts.ApplicationChartData>
+@{
+    Layout = null;
+    var labels = "[";
+    var data = "[";
+
+    foreach (var item in Model)
+    {
+        labels = labels + "'" + item.Campus + "',";
+        data = data + "'" + item.Count + "',";
+    }
+
+    labels = labels + "]";
+    data = data + "]";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ApplicationCharts</title>
+</head>
+<body>
+
+
+    <div>
+        <p>
+            <img style="width: 98%; height:auto;" src="https://quickchart.io/chart?c={type:'doughnut',data:{labels: + @labels, datasets:[{data: @data }]}}">
+        </p>
+        <br />
+        @*<p>
+            <img style="width: 95%; height:auto;" src="https://quickchart.io/chart?c={type:'bar',data:{labels: + @labels, datasets:[{data: @data }]}}">
+        </p>*@
+    </div>
+</body>
+</html>

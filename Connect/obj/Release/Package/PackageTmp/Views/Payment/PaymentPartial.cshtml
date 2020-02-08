@@ -1,0 +1,111 @@
+﻿@model Recruitwise.Models.Payment.PaymentDeclinedViewModel
+
+<div style="float:right;">
+    @Html.ActionLink("Back to List", "Get", "Payment")
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h2>@Model.Name</h2>
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <hr />
+        <p class="section-heading2">Payment Details</p>
+        <p class="JS_PaymentMethod" style="display: none; color: red;">Please provide correct information about your payment</p>
+        @*<p style="color: red;">@(Model?.Message ?? "")</p>*@
+        <table class="JS_Sections_Pay">
+            @*<tr>
+            <td>
+                <p>
+                    @Html.RadioButtonFor(p => p.PaymentMethod, "InterviewDay", new { Checked = "checked", @class = "JS_Payment" })
+                    <span class="JS_Chk_InterviewDayMessage">I will pay Rs. 500 at my Interview time (Insha Allah)</span>
+                    <br />
+                    <span class="JS_Chk_InterviewDayMessage"><b>We will inform you about your interview day and time</b></span>
+                </p>
+                <div class="JS_PayInterviewDay">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" style="color: gray;">
+                <h4> OR </h4>
+            </td>
+        </tr>
+            *@
+            <tr>
+                <td>
+                    <p>
+                        @Html.RadioButtonFor(p => p.PaymentMethod, "AlBurhan", new { Checked = "checked", @class = "JS_Payment" })
+                        <span class="JS_Chk_AlBurhanMessage">I have paid Rs. 500 at Al Burhan Campus</span>
+                    </p>
+                    <div class="JS_PayManual">
+                        <p style="font-size: 11px;">Enter the Receipt Number given by Al Burhan</p>
+                        <p style="font-size: 11px;">format [nnnn-nnnn] where n represents numbers</p>
+                        <p>
+                            @Html.EditorFor(model => model.PaymentCodeManualPreHyphen, new { htmlAttributes = new { style = "max-width:80px; height: 50px; padding: 6px 12px; font-size: 14px; line-height: 1.428571429; color: #555555; vertical-align: middle; background-color:#fffafa; border:rgba(0,0,0,.3) 2px solid; border-radius:3px;", @class = "JS_MaxPaymentCodeManualPreHyphen", MaxLength = "4" } })
+                            -
+                            @Html.EditorFor(model => model.PaymentCodeManualPostHyphen, new { htmlAttributes = new { style = "max-width:80px; height: 50px; padding: 6px 12px; font-size: 14px; line-height: 1.428571429; color: #555555; vertical-align: middle; background-color:#fffafa; border:rgba(0,0,0,.3) 2px solid; border-radius:3px;", @class = "JS_MaxPaymentCodeManualPostHyphen", MaxLength = "4" } })
+                        </p>
+                        <p style="font-size: 11px; text-decoration: underline;">Address:</p>
+                        <p style="font-size: 11px;">Mufti Inamullah Sahib</p>
+                        <p style="font-size: 11px;">Al Burhan Islamabad</p>
+                        <p style="font-size: 11px;">House# 239, Street 51, Sector F-10/4, Islamabad</p>
+                        <p style="font-size: 11px;">(Please bring a copy of your CNIC)</p>
+                        <p style="font-size: 11px; text-decoration: underline">Timings:</p>
+                        <p style="font-size: 11px;">Saturday - Wednesday</p>
+                        <ul>
+                            <li>
+                                <p style="font-size: 11px;">Morning - 08:00 AM till 12:00 PM</p>
+                            </li>
+                            <li>
+                                <p style="font-size: 11px;">Afternoon - 02:00 PM till 07:00 PM</p>
+                            </li>
+                        </ul>
+
+                        @Html.ValidationMessageFor(model => model.PaymentCodeManualPreHyphen, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.PaymentCodeManualPostHyphen, "", new { @class = "text-danger" })
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td align="center" style="color: gray;">
+                    <h4> OR </h4>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>
+                        @Html.RadioButtonFor(p => p.PaymentMethod, "EasyPaisa", new { @class = "JS_Payment" })
+                        <span class="JS_Chk_EasyPaisaMessage">I have paid Rs. 500 through Easy Paisa</span>
+                    </p>
+                    <div class="JS_PayEasyPaisa">
+                        <p style="font-size: 11px;">Enter the 10-digit transaction id</p>
+                        <p>
+                            @Html.EditorFor(model => model.PaymentCodeEasyPaisa, new { htmlAttributes = new { @class = "textbox-my JS_MaxPaymentCodeEasyPaisa", MaxLength = "10", placeholder = "eg: 1234567890" } })
+                        </p>
+                        <p style="font-size: 11px;">Easy Paisa Account Number # 03458561293</p>
+                        <p style="font-size: 11px;">Account Name: Behzad Zahid</p>
+                        @Html.ValidationMessageFor(model => model.PaymentCodeEasyPaisa, "", new { @class = "text-danger" })
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <br />
+
+        <div class="form-group">
+            <div>
+                <input type="submit" value="Update" class="btn btn-default button-my submit_payment_partial" />
+            </div>
+        </div>
+
+    </div>
+
+}
+
+

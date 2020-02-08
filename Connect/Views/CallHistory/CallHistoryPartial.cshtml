@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Connect.Classes.Dapper.CallHistory>
+
+<div style="font-size:x-small;">
+    <table id="details">
+        <tr>
+            <th>Call Outcome</th>
+            <th>Call Notes</th>
+            <th>Caller</th>
+            <th>Kefiyat</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.CallOutcome
+                </td>
+                <td>
+                    @item.CallNotes
+                </td>
+                <td>
+                    @item.Caller
+                </td>
+                <td>
+                    @item.Kefiyat
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+

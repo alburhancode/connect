@@ -1,0 +1,150 @@
+﻿﻿@model Recruitwise.Models.Quiz.IndividualAttendanceBySectionViewModel
+@using Recruitwise.Classes.Helpers;
+@{
+    var sections = SessionHelper.LoggedInUser.UserType == Recruitwise.Classes.DataModels.UserType.AttendanceAdmin ? new List<string> { SessionHelper.LoggedInUser.Section } : SessionHelper.LoggedInUser.Sections;
+}
+
+<div id="individual-attendance-by-section">
+    <div style="float:right;">
+        <table>
+            <tr>
+                <td style="color: slategray;">
+                    <b>Section</b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DropDownList("Section", new SelectList(sections), new { @class = "form-dropdown-my-assessments-smaller js_sections_attendance", @id = "dropdown-section-attendance" })
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div style="clear:both; padding:10px;"></div>
+
+    <table border="1" cellpadding="10" cellspacing="10" style="overflow: auto;">
+        <tr style="background-color:lightsteelblue; opacity: 0.9;">
+            <th>
+                Name
+            </th>
+            <th>
+                Contact
+            </th>
+            <th>
+                Call Outcome
+            </th>
+            <th>
+                Call Notes, Date/Time
+            </th>
+            <th>
+                Caller
+            </th>
+            <th>Kefiyat</th>
+            <th>
+                Save
+            </th>
+            <th>
+                <table>
+                    <tr>
+                        <td style="padding: 8px;">
+                            <p style="color: white; background-color: green; font-size:xx-small; padding:4px;">Present</p>
+                        </td>
+                        <td style="padding: 8px;">
+                            <p style="color: white; background-color: red; font-size:xx-small; padding:4px;">Absent</p>
+                        </td>
+                        <td style="padding: 8px;">
+                            <p style="color: white; background-color: blue; font-size:xx-small; padding:4px;">Leave</p>
+                        </td>
+                        <td style="padding: 8px;">
+                            <p style="color: white; background-color: gray; font-size:xx-small; padding:4px;">Unlisted</p>
+                        </td>
+                    </tr>
+                </table>
+            </th>
+        </tr>
+
+        @for (int i = 0; i < Model.AttendanceSummary.Count; i++)
+        {
+            <tr>
+                <td style="font-size: smaller;">
+                    @Html.ActionLink(Model.AttendanceSummary[i].Name, "PreviewForAdmin", "Main", new { id = Model.AttendanceSummary[i].Id }, new { id = Model.AttendanceSummary[i].Id, target = "_blank" })
+                </td>
+                <td style="font-size: smaller;">
+                    @Model.AttendanceSummary[i].Contact
+                </td>
+                <td style="background-color:lightyellow; font-size:x-small; border-right:none;">
+                    @Html.EnumDropDownListFor(m => Model.AttendanceSummary[i].CallOutcome, new { @style = "border-radius:2px;padding: 2px;", @class = "JS_Attendance_CallOutcome" + Model.AttendanceSummary[i].IndividualId, individualid = Model.AttendanceSummary[i].IndividualId })
+                </td>
+                <td style="background-color:lightyellow; font-size:x-small; border-left:none;border-right:none;">
+                    @Html.TextBoxFor(m => Model.AttendanceSummary[i].CallNotes, new { @style = "border-radius:2px;padding: 2px;", @class = "JS_Attendance_CallNotes" + Model.AttendanceSummary[i].IndividualId, individualid = Model.AttendanceSummary[i].IndividualId })
+                </td>
+                <td style="background-color: lightyellow; font-size:x-small; border-left:none;border-right:none;">
+                    @Html.TextBoxFor(m => Model.AttendanceSummary[i].Caller, new { @style = "border-radius:2px;padding: 2px;", @class = "JS_Attendance_Caller" + Model.AttendanceSummary[i].IndividualId, individualid = Model.AttendanceSummary[i].IndividualId })
+                </td>
+                <td style="background-color:lightyellow; font-size:x-small; border-right:none;">
+                    @Html.EnumDropDownListFor(m => Model.AttendanceSummary[i].Kefiyat, new { @style = "border-radius:2px;padding: 2px;", @class = "JS_Attendance_Kefiyat" + Model.AttendanceSummary[i].IndividualId, individualid = Model.AttendanceSummary[i].IndividualId })
+                </td>
+                <td style="background-color: lightyellow; font-size:x-small; border-left:none; border-radius:2px;">
+                    <input type="button" value="Save" id="SaveCallDetails" individualid=@Model.AttendanceSummary[i].IndividualId />
+                </td>
+                <td style="overflow: auto;">
+                    <table cellspacing="1" style="overflow: auto;">
+                        <tr>
+                            @foreach (var history in Model.AttendanceSummary[i].History)
+                            {
+                                if (history.HasChangedSection)
+                                {
+                                    <td>
+                                        @if (history.Status == 0)
+                                        {
+                                            <p style="color: white; background-color: red; padding: 4px; opacity:0.8;font-size:xx-small;">@history.CreatedAt.ToString("dd.MM.yy")</p>
+                                        }
+                                        else if (history.Status == 1)
+                                        {
+                                            <p style="color: white;background-color:green;padding: 4px; opacity:0.8;font-size:xx-small;">@history.CreatedAt.ToString("dd.MM.yy")</p>
+                                        }
+                                        else if (history.Status == 2)
+                                        {
+                                            <p style="color: white;background-color:blue;padding: 4px; opacity:0.8;font-size:xx-small;">@history.CreatedAt.ToString("dd.MM.yy")</p>
+                                        }
+                                        else if (history.Status == 3)
+                                        {
+                                            <p style="color: white;background-color:gray;padding: 4px; opacity:0.8;font-size:xx-small;">@history.CreatedAt.ToString("dd.MM.yy")</p>
+                                        }
+                                    </td>
+
+                                }
+                                else
+                                {
+                                    <td>
+                                        @if (history.Status == 0)
+                                        {
+                                            <p style="color: white; background-color: red; padding: 4px; font-size:xx-small;">@history.CreatedAt.ToString("dd.MM.yy")</p>
+                                        }
+                                        else if (history.Status == 1)
+                                        {
+                                            <p style="color: white;background-color:green;padding: 4px;font-size:xx-small;">@history.CreatedAt.ToString("dd.MM.yy")</p>
+                                        }
+                                        else if (history.Status == 2)
+                                        {
+                                            <p style="color: white;background-color:blue;padding: 4px;font-size:xx-small;">@history.CreatedAt.ToString("dd.MM.yy")</p>
+                                        }
+                                        else if (history.Status == 3)
+                                        {
+                                            <p style="color: white;background-color:gray;padding: 4px;font-size:xx-small;">@history.CreatedAt.ToString("dd.MM.yy")</p>
+                                        }
+                                    </td>
+
+                                }
+                            }
+
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        }
+
+    </table>
+    <div class="ajax_loader" style="display:none;"></div>
+</div>
+
+

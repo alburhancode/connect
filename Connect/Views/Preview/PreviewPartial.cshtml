@@ -1,0 +1,651 @@
+﻿@using Connect.Classes
+@using Connect.Classes.DataModels
+@using Connect.Classes.Helpers
+@model Connect.Models.Preview.PreviewViewModel
+@{
+    ViewBag.Title = "Main";
+}
+
+@if (SessionHelper.LoggedInUser.UserType == UserType.Ceo)
+{
+    <div style="float:right;">
+        @Html.ActionLink("Back to List", "GetIntervieweesForCeo", "Interview")
+    </div>
+}
+else if (SessionHelper.LoggedInUser.UserType == UserType.Panel)
+{
+    <div style="float:right;">
+        @Html.ActionLink("Back to List", "GetIntervieweesForPanel", "Interview")
+    </div>
+}
+
+@if (Model.Individual.PaymentStatus == PaymentStatus.Blocked)
+{
+    <p><img src="~/Images/red-alert.png" width="25" height="25" /> Your account is no longer active. Please click Apply to start your application again.</p>
+}
+else if (Model.Individual.PaymentStatus == PaymentStatus.Declined)
+{
+    <p>
+        <img src="~/Images/red-alert.png" width="25" height="25" /> Your payment was declined. Please login to re-enter correct details of your payment.
+    </p>
+}
+
+@if (SessionHelper.LoggedInUser.UserType == UserType.PaymentAdministrator)
+{
+    <p style="float: right;">@Html.ActionLink("Back to list", "Get", "Payment")    </p>
+}
+
+@if (SessionHelper.LoggedInUser.UserType == UserType.Manager)
+{
+    <p style="float: right;">@Html.ActionLink("Back to list", "GetCandidatesForCeoDecision", "Admissions")    </p>
+}
+
+@if (SessionHelper.LoggedInUser.UserType == UserType.Applicant)
+{
+    <p style="float: right;">@Html.ActionLink("Edit Details", "Register", "Signup", new { id = Model.Individual.Id }, null)</p>
+}
+
+@*@if (Model.Individual.RegistrationStatus != RegistrationStatus.Enrolled &&
+    Model.Individual.RegistrationStatus != RegistrationStatus.Dropped)
+{
+    <div>
+        <table cellpadding="7">
+            <tr>
+                @if (!string.IsNullOrEmpty(Model.InterviewSlot) && Model.InterviewSlot.ToLower() != "none")
+                {
+                    <td>
+                        @Html.Label("Interview booked for ")
+                    </td>
+                    <td>
+                        <p style="font-size: 18px; color: green;"><b>@Model.InterviewSlot</b></p>
+                    </td>
+                }
+            </tr>
+        </table><div style="clear: both;"></div>
+    </div>
+}*@
+
+    <table id="details_plain">
+        <tr>
+            <th colspan="2">My Details</th>
+        </tr>
+        @if (Model.Individual.RegistrationStatus != RegistrationStatus.Enrolled &&
+            Model.Individual.RegistrationStatus != RegistrationStatus.Dropped)
+        {
+            <tr>
+                @if (!string.IsNullOrEmpty(Model.InterviewSlot) && Model.InterviewSlot.ToLower() != "none")
+                {
+                    <td>
+                        @Html.Label("Interview booked for ")
+                    </td>
+                    <td>
+                        <p style="font-size: 18px; color: green;"><b>@Model.InterviewSlot</b></p>
+                    </td>
+                }
+            </tr>
+        }
+            <tr>
+                <td>
+                    @Html.Label("Section Timing")
+                </td>
+                <td>
+                    <p style="font-size: 18px; color: green;"><b>@Model.Individual.Timing</b></p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.Individual.AdvancedSelection)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(model => model.Individual.AdvancedSelection)
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.Individual.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Individual.Name)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.Individual.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Individual.Email)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.Individual.Phone)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(model => model.Individual.Phone)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.Individual.Age)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(model => model.Individual.Age)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.Individual.PaymentCode)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(model => model.Individual.PaymentCode)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.Individual.NicNumber)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(model => model.Individual.NicNumber)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.Individual.OtherContact)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(model => model.Individual.OtherContact)
+                </td>
+            </tr>
+            @if (Model.Individual.ResidentialAddress != null && Model.Individual.ResidentialAddress.Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.ResidentialAddress)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.ResidentialAddress)
+                    </td>
+                </tr>
+
+            }
+
+            @if (Model.Individual.PermanentAddress != null && Model.Individual.PermanentAddress.Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.PermanentAddress)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.PermanentAddress)
+                    </td>
+                </tr>
+
+            }
+
+            @if (Model.Individual.MatricGpa.HasValue && Model.Individual.MatricGpa.Value.ToString().Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.MatricGpa)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.MatricGpa)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.MatricSubjects)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.MatricSubjects)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.MatricInstitute)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.MatricInstitute)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Individual.IntermediateGpa.HasValue && Model.Individual.IntermediateGpa.Value.ToString().Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.IntermediateGpa)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.IntermediateGpa)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.IntermediateSubjects)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.IntermediateSubjects)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.IntermediateInstitute)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.IntermediateInstitute)
+                    </td>
+                </tr>
+
+            }
+
+            @if (Model.Individual.GraduationGpa.HasValue && Model.Individual.GraduationGpa.Value.ToString().Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.GraduationGpa)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.GraduationGpa)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.GraduationSubjects)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.GraduationSubjects)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.GraduationInstitute)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.GraduationInstitute)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Individual.MastersGpa.HasValue && Model.Individual.MastersGpa.Value.ToString().Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.MastersGpa)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.MastersGpa)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.MastersSubjects)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.MastersSubjects)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.MastersInstitution)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.MastersInstitution)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Individual.MsGpa.HasValue && Model.Individual.MsGpa.Value.ToString().Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.MsGpa)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.MsGpa)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.MsSubjects)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.MsSubjects)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.MsInstitution)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.MsInstitution)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Individual.PhdSubjects != null && Model.Individual.PhdSubjects.Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.PhdSubjects)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.PhdSubjects)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.PhdInstitution)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.PhdInstitution)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Individual.OtherQualification != null && Model.Individual.OtherQualification.Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.OtherQualification)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.OtherQualification)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Individual.CurrentJob != null && Model.Individual.CurrentJob.Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.CurrentJob)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.CurrentJob)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Individual.CompanyName != null && Model.Individual.CompanyName.Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.CompanyName)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.CompanyName)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Individual.Designation != null && Model.Individual.Designation.Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.Designation)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.Designation)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Individual.TotalJobExperience != null && Model.Individual.TotalJobExperience.Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.TotalJobExperience)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.TotalJobExperience)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Individual.BusinessName != null && Model.Individual.BusinessName.Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.BusinessName)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.BusinessName)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Individual.BusinessArea != null && Model.Individual.BusinessArea.Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.BusinessArea)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.BusinessArea)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Individual.BusinessNature != null && Model.Individual.BusinessNature.Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.BusinessNature)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.BusinessNature)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Individual.AppliedBefore)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.AppliedBefore)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.AppliedBefore)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Individual.AnyReligiousEducation)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.AnyReligiousEducation)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.AnyReligiousEducation)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Individual.ReligiousEducationSpecify != null && Model.Individual.ReligiousEducationSpecify.Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.ReligiousEducationSpecify)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.ReligiousEducationSpecify)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Individual.AnyOtherExpertise != null && Model.Individual.AnyOtherExpertise.Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.AnyOtherExpertise)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.AnyOtherExpertise)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Individual.PaymentMethod != null && Model.Individual.PaymentMethod.Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.PaymentMethod)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.PaymentMethod)
+                    </td>
+                </tr>
+            }
+            @*<tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.Individual.InterviewSlotId)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(model => model.Individual.InterviewSlotId)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.Individual.CeoGradeValue)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(model => model.Individual.CeoGradeValue)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.Individual.PanelGradeValue)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(model => model.Individual.PanelGradeValue)
+                </td>
+            </tr>*@
+
+            @if (Model.Individual.ClassSelection != null && Model.Individual.ClassSelection.Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.ClassSelection)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.ClassSelection)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Individual.WhatsAppNumber != null && Model.Individual.WhatsAppNumber.Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.WhatsAppNumber)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.WhatsAppNumber)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Individual.EducationDetails != null && Model.Individual.EducationDetails.Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.EducationDetails)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.EducationDetails)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Individual.Responsibilities != null && Model.Individual.Responsibilities.Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.Responsibilities)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.Responsibilities)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Individual.ProfessionStudyBusinessDetails != null && Model.Individual.ProfessionStudyBusinessDetails.Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.ProfessionStudyBusinessDetails)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.ProfessionStudyBusinessDetails)
+                    </td>
+                </tr>
+            }
+
+            @if (Model.Individual.CityDetails != null && Model.Individual.CityDetails.Length > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Individual.CityDetails)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.Individual.CityDetails)
+                    </td>
+                </tr>
+            }
+        </table>
+
+@if (SessionHelper.LoggedInUser.UserType == UserType.Applicant || SessionHelper.LoggedInUser.UserType == UserType.PaymentAdministrator || SessionHelper.LoggedInUser.UserType == UserType.Manager || SessionHelper.LoggedInUser.UserType == UserType.Ceo)
+{
+    <p style="float: right;">@Html.ActionLink("Edit Details", "Register", "Signup", new { id = Model.Individual.Id }, null)</p>
+}
+<br />

@@ -1,0 +1,124 @@
+﻿﻿﻿﻿@model Recruitwise.Models.ApplyAdminViewModel
+@{
+    ViewBag.Title = "Apply Admin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Admin Application page (late applications)</h1>
+    @using (Html.BeginForm())
+    {
+        <input type="hidden" value="true" id="hdnAdmin" />
+
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="section-focus">
+                <div>
+                    <table id="details_plain_small">
+                        <tr>
+                            <td colspan="3">
+                                <p class="section-heading2-sub"><span style="padding-left: 5pt;">Initial Details</span></p>
+                            </td>
+                        </tr>
+
+                        <tr class="form-group">
+                            <td>@Html.Label("Please select your current status", new { @class = "label-simple-small" })</td>
+                            <td>
+                                <div>
+                                    @Html.EnumDropDownListFor(model => model.CurrentStatus, new { @class = "form-dropdown-my" })
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr class="form-group">
+                            <td>
+                                @Html.Label("Campus", new { @class = "label-simple-small" })
+                            </td>
+                            <td>
+                                <div>
+                                    @Html.EnumDropDownListFor(model => model.Campus, new { @class = "form-dropdown-my JS_Campus_Selection" })
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr class="form-group">
+                            <td>@Html.LabelFor(model => model.Name, "Name", new { @class = "label-simple-small" })</td>
+                            <td>
+                                <div>
+                                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "textbox-my", MaxLength = "50", MinLength = "1", placeholder = "Name" } })
+                                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr class="form-group">
+                            <td>@Html.LabelFor(model => model.Email, "Email", new { @class = "label-simple-small" })</td>
+                            <td>
+                                <div>
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "textbox-my", MaxLength = "80", MinLength = "6", placeholder = "Email: Username@gmail.com" } })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr class="form-group">
+                            <td>@Html.LabelFor(model => model.Phone, "Phone", new { @class = "label-simple-small" })</td>
+                            <td>
+                                <div>
+                                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "textbox-my JS_PhoneMaxLength", MaxLength = "14", MinLength = "5", placeholder = "Phone: 03xxxxxxxxx" } })
+                                    @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr class="form-group">
+                            <td>@Html.LabelFor(model => model.Age, "Age", new { @class = "label-simple-small" })</td>
+                            <td>
+                                <div>
+                                    @Html.EditorFor(model => model.Age, new { htmlAttributes = new { @class = "textbox-my JS_AgeRange", placeholder = "Age (in years eg. 35)" } })
+                                    @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr class="form-group">
+                            <td>@Html.LabelFor(model => model.Password, "Password", new { @class = "label-simple-small" })</td>
+                            <td>
+                                <div>
+                                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "textbox-my JS_Password", MinLength = "6", MaxLength = "12", placeholder = "Password (between 6 and 12 characters)" } })
+                                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr class="form-group">
+                            <td>@Html.LabelFor(model => model.ConfirmPassword, "Confirm Password", new { @class = "label-simple-small" })</td>
+                            <td>
+                                <div>
+                                    @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "textbox-my JS_ConfirmPassword", MinLength = "6", MaxLength = "12", placeholder = "Confirm Password" } })
+                                    @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                                </div>
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+                <p style="display: none; color: red;" class="JS_PasswordMisMatch">Your passwords do not match. Please re-enter.</p>
+            </div>
+
+            <div class="section-focus JS_TimingSelectionShowHide">
+                @{ Html.RenderAction("AvailableBatchTimings", "ApplyTimings", new { campusSelection = 0 }); }
+            </div>
+            <div>
+                <div>
+                    <input type="submit" value="Apply" class="btn btn-default button-my-apply submit_apply_admin" />
+                </div>
+            </div>
+        </div>
+    }
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,12 @@
+﻿@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p><h2>Thankyou for providing your details</h2></p> 
+<p>We will verify your payment followed by an email with your credentials at the specified email address. Once you have received your credentials, you will be able to login and proceed with step 2 of 3 in your application process</p>
+
+<div>
+    <hr />
+    <p><b>Please click @Html.ActionLink("here", "authenticate", "Login") to go to the login page</b></p>
+</div>

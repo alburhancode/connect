@@ -1,0 +1,125 @@
+﻿﻿@using Connect.Classes.DataModels
+@using Connect.Classes.DataModels
+@using Connect.Classes.Helpers
+@model Connect.Models.Interview.CeoGradingViewModel
+@{
+    IEnumerable<Connect.Models.Interview.Grade> grades = new List<Connect.Models.Interview.Grade>
+    {
+        new Connect.Models.Interview.Grade
+        {
+            GradeId = 6,
+            GradeValue = "A+"
+        },
+        new Connect.Models.Interview.Grade
+        {
+            GradeId = 5,
+            GradeValue = "A"
+        },
+        new Connect.Models.Interview.Grade
+        {
+            GradeId = 4,
+            GradeValue = "A-"
+        },
+        new Connect.Models.Interview.Grade
+        {
+            GradeId = 3,
+            GradeValue = "B+"
+        },
+        new Connect.Models.Interview.Grade
+        {
+            GradeId = 2,
+            GradeValue = "B"
+        },
+        new Connect.Models.Interview.Grade
+        {
+            GradeId = 1,
+            GradeValue = "C"
+        },
+        new Connect.Models.Interview.Grade
+        {
+            GradeId = 7,
+            GradeValue = "Listener"
+        },
+        new Connect.Models.Interview.Grade
+        {
+            GradeId = 8,
+            GradeValue = "Not Graded"
+        }
+    };
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    if (SessionHelper.LoggedInUser.UserType == UserType.Ceo)
+    {
+        <div style="float:right;">
+            @Html.ActionLink("Back to List", "GetIntervieweesForCeo", "Interview")
+        </div>
+    }
+    else if (SessionHelper.LoggedInUser.UserType == UserType.Panel)
+    {
+        <div style="float:right;">
+            @Html.ActionLink("Back to List", "GetIntervieweesForPanel", "Interview")
+        </div>
+    }
+
+    <div class="form-horizontal">
+        @*<h2>@Model.Name</h2>
+        <hr />*@
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <table style="background-color: #F8F8F8; color: #32597c; font-size: 16px;" cellpadding="5">
+            <thead>
+                <p class="section-heading2">COMMENTS AND GRADES</p>
+            </thead>
+            <tr>
+                <td width="25%" style="padding-left: 100px;">
+                    Comments
+                </td>
+                <td width="30%">
+                    <div>
+                        <div style="margin-left: 10px;">
+                            @Html.EditorFor(model => model.Comments, new { htmlAttributes = new { @class = "form-control", MaxLength = "500", rows = 5 } })
+                            @Html.ValidationMessageFor(model => model.Comments, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td width="25%" style="padding-left: 100px;">
+                    Grade
+                </td>
+                <td width="30%">
+                    <div>
+                        <div style="margin-left: 10px;">
+                            <p>@Html.ValidationMessage("Grade", new { @class = "text-danger" })</p>
+                            @Html.DropDownListFor(x => x.Grade, new SelectList(grades, "GradeId", "GradeValue"), "please select a grade", new { @class = "form-control" })
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <br />
+
+        @if (SessionHelper.LoggedInUser.UserType == UserType.Ceo)
+        {
+            <div class="form-group">
+                <div>
+                    <input type="submit" id="SubmitCeoGrading" value="Submit" class="btn btn-default button-my JS_CeoGradingSubmit" />
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "GetIntervieweesForCeo", "Interview")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Recruitwise.Models.Quiz.IndividualEventViewModel>
+
+@*<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@
+<table id="details">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.EventName)
+        </th>
+        <th>
+            Date Conducted
+        </th>
+        <th>
+            Conducted By
+        </th>
+        <th>
+            Marks Obtained
+        </th>
+        <th>
+            Total Marks
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.EventName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateConductedShort)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ConductedBy)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MarksObtained)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MaxMarks)
+        </td>
+    </tr>
+}
+
+</table>

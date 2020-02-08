@@ -1,0 +1,168 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body style="background-color: black; color:white;">
+    <h1>API endpoints for grading</h1>
+    <div style="border:5px solid pink; padding: 20px; border-radius: 8px;">
+        <h2><u>Get all candidates that have payments verified</u></h2>
+        <table cellpadding="2" style="padding:10px;">
+            <tr>
+                <td><b>REQUEST</b></td>
+            </tr>
+            <tr>
+                <td>
+                    https://alburhanconnect.com/api/v1/list/verified/{batch}/{authority}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    where {batch} can be
+                    <ul>
+                        <li>dec2019isb</li>
+                        <li>dec2019isbw</li>
+                        <li>dec2019lhr</li>
+                        <li>dec2019khi</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    and authority can be
+                    <ul>
+                        <li>panel</li>
+                        <li>ceo</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><b>EXAMPLE panel</b></td>
+            </tr>
+            <tr>
+                <td>
+                    https://alburhanconnect.com/api/v1/list/verified/dec2019isb/panel
+                    <br />
+                    <br />
+                </td>
+            </tr>
+            <tr>
+                <td><b>EXAMPLE ceo</b></td>
+            </tr>
+            <tr>
+                <td>
+                    https://alburhanconnect.com/api/v1/list/verified/dec2019khi/ceo
+                    <br />
+                    <br />
+                </td>
+            </tr>
+
+            <tr>
+                <td style="background-color: darkgreen; padding: 10px; border-radius: 4px; max-width:50% !important;">
+                    <b>RESPONSE</b><br />
+                    [
+                    <br/>
+                    {<br/>"individualId":101194,"name":"abc name","email":"abc@gmail.com" ,"age":25,"residentialAddress":"Al asif hardware F10 markaz"
+                     ,"permanentAddress":"Village beetla tain post office Barian camp Teh. and dist. Abbotabad" ,"matricGpa":77
+                     ,"matricSubjects":"Physics Math cehmistry Bio","matricInstitute":"Govt comp. High school rwp","intermediateGpa":70
+                     ,"intermediateSubjects":"Physics chemistry Math","intermediateInstitute":"Indus college of science rwp","graduationGpa":78
+                     ,"graduationSubjects":"Copmuter science","graduationInstitute":"Pmas Arid agriculture university Rawalpindi","mastersGpa":null
+                     ,"mastersSubjects":null,"mastersInstitution":null,"msGpa":null,"msSubjects":null,"msInstitution":null,"phdSubjects":null
+                     ,"phdInstitution":null,"otherQualification":null,"currentJob":"Yes ","companyName":"Al Asif ","designation":"Sales representative "
+                     ,"totalJobExperience":"3 years","businessName":null,"businessArea":null,"businessNature":null<br/>},
+                     <br /><br />
+                     {<br/>"individualId":101175,"name":"xyz name","email":"xyz@gmail.com","age":26,"residentialAddress":"shamsabad rawalpindi"
+                     ,"permanentAddress":"PO Chajjian Village Chapprian Thesil/Disstic Haripur","matricGpa":56
+                     ,"matricSubjects":"Since","matricInstitute":"BISE Abbobatabad","intermediateGpa":null
+                     ,"intermediateSubjects":null,"intermediateInstitute":null,"graduationGpa":null,"graduationSubjects":null
+                     ,"graduationInstitute":null,"mastersGpa":null,"mastersSubjects":null,"mastersInstitution":null,"msGpa":null,"msSubjects":null
+                     ,"msInstitution":null,"phdSubjects":null,"phdInstitution":null,"otherQualification":"OT Surgery continue",
+                     "currentJob":"Operating Rooms","companyName":"Shifa International Hospital Islamabad","designation":"OT Attantend"
+                     ,"totalJobExperience":"07 years","businessName":null,"businessArea":null,"businessNature":null<br/>}
+                    <br/>
+                    ]
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br />
+    <div style="border:5px solid pink; padding: 20px; border-radius: 8px;">
+        <h2><u>Save Ceo / Panel Grading for one or more candidate</u></h2>
+        <table cellpadding="2" style="padding:10px;">
+            <tr>
+                <td><b>REQUEST</b></td>
+            </tr>
+            <tr>
+                <td>
+                    https://alburhanconnect.com/api/v1/grading/save/{authority}/{apikey}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    where {authority} can be
+                    <ul>
+                        <li>ceo</li>
+                        <li>panel</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><b>EXAMPLE usage for CEO</b></td>
+            </tr>
+            <tr>
+                <td>
+                    https://alburhanconnect.com/api/v1/grading/save/ceo/{apikey}
+                    <br />
+                    <br />
+                </td>
+            </tr>
+            <tr>
+                <td><b>EXAMPLE usage for Panel</b></td>
+            </tr>
+            <tr>
+                <td>
+                    https://alburhanconnect.com/api/v1/grading/save/panel/{apikey}
+                    <br />
+                    <br />
+                </td>
+            </tr>
+            <tr>
+                <td><b>REQUEST BODY</b></td>
+            </tr>
+            <tr>
+                <td style="background-color: darkgreen; padding: 10px; border-radius: 4px;">
+                    {
+                        "email":"abc@gmail.com",
+                        "createdAt":"2019-11-15T12:52:10.413Z",
+                        "grading":
+                        [
+                            {
+                                "grade":"3",
+                                "comments":"well done but need more"
+                            }
+                        ]
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <br/>
+                    where Grades (int) range in [ 1 | 2 | 3 | 4 | 5 | 6 | 7 | 0 ]
+                    <ul>
+                        <li>[1] for C</li>
+                        <li>[2] for B</li>
+                        <li>[3] for B+</li>
+                        <li>[4] for A-</li>
+                        <li>[5] for A</li>
+                        <li>[6] for A+</li>
+                        <li>[7] for Listener</li>
+                        <li>[0] for none or not graded</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</body>
+</html>

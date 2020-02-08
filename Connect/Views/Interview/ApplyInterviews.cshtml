@@ -1,0 +1,29 @@
+﻿@model Connect.Models.Interview.ApplyInterviewViewModel
+
+@if (Model.AvailableInterviewSlots != null)
+{
+    <div>
+        <table id="details_plain_small">
+            <tr>
+                <td colspan="3">
+                    <hr style="height: 0.5px; background-color: lightgray;" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <p class="section-heading2-sub">@*<img width="35" height="30" src="~/Images/contact-details.png">*@<span style="padding-left: 15px;">Interview Details</span></p>
+                </td>
+            </tr>
+
+            <tr class="form-group">
+                <td>@Html.Label("Please select an interview date and time", new { @class = "label-simple-small" })</td>
+                <td>
+                    <div>
+                        <p>@Html.ValidationMessage("InterviewSlotOccupied", new { @class = "text-danger" })</p>
+                        @Html.DropDownListFor(x => x.SelectedInterviewSlotId, new SelectList(Model.AvailableInterviewSlots, "InterviewSlotId", "Slot"), new { @class = "form-dropdown-my" })
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+}

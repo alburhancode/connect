@@ -1,0 +1,56 @@
+﻿@using Recruitwise.Classes.Helpers
+@{
+    ViewBag.Title = "Events";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="background-color:rgba(195,195,195,.3); padding: 1px; border:beige 1px solid; border-radius:3px;">
+    <div style="padding:2px;">
+        <img style="float:left; padding: 5px;" src="~/Images/burhan2.png" width="85" height="85" />
+        Batch <h4>@SessionHelper.LoggedInUser.Batch</h4>
+        <h4 style="float:right;padding-right:2px; color:#413d62;">Quizzes</h4>
+    </div>
+    <div style="clear:both;" />
+    <hr style="height:2px; background-color:gray;" />
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="tab">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active" id="main_quiz_tab"><a href="#Section3" aria-controls="profile" role="tab" data-toggle="tab">Individual Quizzes</a></li>
+                        <li role="presentation"><a id="tabAssessments" href="#SectionAssessments" aria-controls="profile" role="tab" data-toggle="tab">Quizzes</a></li>
+                        <li role="presentation"><a href="#Section1" aria-controls="home" role="tab" data-toggle="tab">Quiz Templates</a></li>
+                    </ul>
+                </div>
+
+                <div class="tab-content">
+                    <div id="Section1" class="tab-pane fade">
+                        <br />
+                        <div>
+                            @{ Html.RenderAction("EventTypesGet", "Events"); }
+                        </div>
+                    </div>
+                    <div id="SectionAssessments" class="tab-pane fade">
+                        <br />
+                        <div id="divTabAssessment">
+                            @{ Html.RenderAction("EventOccurencesGet", "Events"); }
+                        </div>
+                    </div>
+                    <div id="Section3" class="tab-pane fade in active">
+                        <br />
+                        <div>
+                            @{ Html.RenderAction("IndividualsBySectionGet", "Events", new { section = "A", selectedEvent = 0 }); }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
